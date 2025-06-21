@@ -1,0 +1,112 @@
+[06-Feb-2024 06:04:12 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Artisan" not found in /home/leoniesu/public_html/routes/console.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/console.php on line 17
+[06-Feb-2024 06:04:12 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Artisan" not found in /home/leoniesu/public_html/routes/console.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/console.php on line 17
+[06-Feb-2024 06:04:12 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Artisan" not found in /home/leoniesu/public_html/routes/console.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/console.php on line 17
+[06-Feb-2024 06:04:12 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Broadcast" not found in /home/leoniesu/public_html/routes/channels.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/channels.php on line 16
+[06-Feb-2024 06:04:12 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Broadcast" not found in /home/leoniesu/public_html/routes/channels.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/channels.php on line 16
+[06-Feb-2024 06:04:12 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Broadcast" not found in /home/leoniesu/public_html/routes/channels.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/channels.php on line 16
+[06-Feb-2024 06:04:12 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Broadcast" not found in /home/leoniesu/public_html/routes/channels.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/channels.php on line 16
+[06-Feb-2024 06:04:12 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Route" not found in /home/leoniesu/public_html/routes/web.php:31
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/web.php on line 31
+[06-Feb-2024 06:04:12 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Route" not found in /home/leoniesu/public_html/routes/web.php:31
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/web.php on line 31
+[06-Feb-2024 06:04:12 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Route" not found in /home/leoniesu/public_html/routes/web.php:31
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/web.php on line 31
+[06-Feb-2024 06:04:12 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Route" not found in /home/leoniesu/public_html/routes/api.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/api.php on line 17
+[06-Feb-2024 06:04:12 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Route" not found in /home/leoniesu/public_html/routes/web.php:31
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/web.php on line 31
+[06-Feb-2024 06:04:12 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Route" not found in /home/leoniesu/public_html/routes/api.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/api.php on line 17
+[06-Feb-2024 06:04:12 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Route" not found in /home/leoniesu/public_html/routes/api.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/api.php on line 17
+[06-Feb-2024 06:04:12 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Broadcast" not found in /home/leoniesu/public_html/routes/channels.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/channels.php on line 16
+[06-Feb-2024 06:04:12 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Broadcast" not found in /home/leoniesu/public_html/routes/channels.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/channels.php on line 16
+[06-Feb-2024 06:04:12 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Broadcast" not found in /home/leoniesu/public_html/routes/channels.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/channels.php on line 16
+[06-Feb-2024 06:04:12 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Route" not found in /home/leoniesu/public_html/routes/api.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/api.php on line 17
+[06-Feb-2024 06:04:13 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Artisan" not found in /home/leoniesu/public_html/routes/console.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/console.php on line 17
+[06-Feb-2024 06:04:14 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Route" not found in /home/leoniesu/public_html/routes/api.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/api.php on line 17
+[06-Feb-2024 06:04:14 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Route" not found in /home/leoniesu/public_html/routes/web.php:31
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/web.php on line 31
+[06-Feb-2024 06:04:14 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Route" not found in /home/leoniesu/public_html/routes/web.php:31
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/web.php on line 31
+[06-Feb-2024 06:04:14 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Route" not found in /home/leoniesu/public_html/routes/web.php:31
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/web.php on line 31
+[06-Feb-2024 06:04:14 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Route" not found in /home/leoniesu/public_html/routes/api.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/api.php on line 17
+[06-Feb-2024 06:04:14 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Route" not found in /home/leoniesu/public_html/routes/api.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/api.php on line 17
+[06-Feb-2024 06:04:15 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Artisan" not found in /home/leoniesu/public_html/routes/console.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/console.php on line 17
+[06-Feb-2024 06:04:23 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Artisan" not found in /home/leoniesu/public_html/routes/console.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/console.php on line 17
+[06-Feb-2024 06:04:23 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Artisan" not found in /home/leoniesu/public_html/routes/console.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/leoniesu/public_html/routes/console.php on line 17
