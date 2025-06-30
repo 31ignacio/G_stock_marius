@@ -4,13 +4,7 @@
 
     <section class="content">
         <div class="container-fluid">
-             <a href="{{ route('facture.point') }}"
-                class="btn btn-lg btn-outline-primary shadow-sm px-4 py-2 d-inline-flex align-items-center gap-2 animate__animated animate__pulse animate__infinite"
-                style="border-width: 2px; font-weight: 600;">
-                    <i class="fas fa-chart-line" style="font-size: 20px; color: #0d6efd;"></i>
-                    <span style="color: #0d6efd;">🔵 Voir les ventes d'hier</span>
-            </a><br><br>
-
+             
                 <div class="card table-responsive">
                     <div class="card-header">
                         <h3 class="card-title">Liste des factures</h3>
@@ -63,7 +57,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <h5>
-                                        <i class="fas fa-globe"></i> <b>G_STOCK</b>.
+                                        <i class="fas fa-globe"></i> <b>APAL TRADING</b>.
                                         <small class="float-right">Date: {{ date('d/m/Y', strtotime($date)) }}
                                         </small>
                                     </h5>

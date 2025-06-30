@@ -17,11 +17,11 @@ return new class extends Migration
             $table->string('libelle');
             $table->float('quantite')->nullable();
             $table->dateTime('dateReception');
-            $table->text('prix');
+            $table->decimal('prix', 10, 2)->nullable();
+            $table->decimal('prixAchat', 10, 2)->default(0);
             $table->dateTime('dateExpiration');
             $table->unsignedBigInteger('produitType_id');
             $table->foreign('produitType_id')->references('id')->on('produit_types')->onDelete('cascade');
-
             $table->timestamps();
         });
     }

@@ -103,7 +103,9 @@ class StockController extends Controller
         $libelle = $request->libelle;
 
         $query = Stock::query()
-            ->whereBetween('date', [$dateDebut, $dateFin]);
+            ->whereBetween('date', [$dateDebut, $dateFin])
+            ->where('produitType_id',2);
+
 
         if ($libelle) {
             $query->where('libelle', $libelle);
@@ -184,7 +186,8 @@ class StockController extends Controller
         $libelle = $request->libelle;
 
         $query = Stock::query()
-            ->whereBetween('date', [$dateDebut, $dateFin]);
+            ->whereBetween('date', [$dateDebut, $dateFin])
+            ->where('produitType_id',1);
 
         if ($libelle) {
             $query->where('libelle', $libelle);
@@ -446,27 +449,6 @@ class StockController extends Controller
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * Actuel stock detail divers
      */
@@ -490,6 +472,32 @@ class StockController extends Controller
         return view('Stocks.actuel', compact('produits'));
     }
 
+
+    /**
+     * PDF du stock actuel divers
+     */
+    public function exportActuelDiversPDF()
+    {
+        $produits = grosProduit::leftJoin('factures', 'gros_produits.libelle', '=', 'factures.produit')
+            ->select(
+                'gros_produits.*',
+                DB::raw('COALESCE(SUM(factures.quantite), 0) as total_sortie')
+            )
+            ->where('gros_produits.produitType_id', 2)
+            ->groupBy('gros_produits.id') // Assurez-vous que la clé primaire `id` existe dans gros_produits
+            ->get();
+
+        // Calcul du stock actuel pour chaque produit
+        foreach ($produits as $produit) {
+            $produit->stock_actuel = $produit->quantite - $produit->total_sortie;
+        }
+
+        $date = now()->format('d/m/Y');
+
+        $pdf = Pdf::loadView('stocks.actuel_divers_pdf', compact('produits','date'));
+        return $pdf->download('stocks_actuel_divers_' . now()->format('Ymd_His') . '.pdf');
+    }
+
     /**
      * Actuel stock de la poissonerie
      */
@@ -511,6 +519,32 @@ class StockController extends Controller
         }
 
         return view('Stocks.actuelPoissonerie', compact('produits'));
+    }
+
+
+    /**
+     * PDF du stock actuel poissonnerie
+     */
+    public function exportActuelPoissonneriePDF()
+    {
+        $produits = grosProduit::leftJoin('factures', 'gros_produits.libelle', '=', 'factures.produit')
+            ->select(
+                'gros_produits.*',
+                DB::raw('COALESCE(SUM(factures.quantite), 0) as total_sortie')
+            )
+            ->where('gros_produits.produitType_id', 1)
+            ->groupBy('gros_produits.id') // Assurez-vous que la clé primaire `id` existe dans gros_produits
+            ->get();
+
+        // Calcul du stock actuel pour chaque produit
+        foreach ($produits as $produit) {
+            $produit->stock_actuel = $produit->quantite - $produit->total_sortie;
+        }
+
+        $date = now()->format('d/m/Y');
+
+        $pdf = Pdf::loadView('stocks.actuel_poissonnerie_pdf', compact('produits','date'));
+        return $pdf->download('stocks_actuel_poissonnerie_' . now()->format('Ymd_His') . '.pdf');
     }
 
 
@@ -589,15 +623,12 @@ class StockController extends Controller
      public function store(Request $request)
     {
         $user = Auth::user()->id;
-        
         $stock = new Stock();
-
         // Obtenir la date du jour
         $dateDuJour = Carbon::now();
 
         // Récupérer les données JSON envoyées depuis le formulaire
-        $stock->libelle = $request->produit;
-        
+        $stock->libelle = $request->produit;        
         $stock->quantite = $request->quantite;
         $stock->date = $dateDuJour;
         $stock->produitType_id = 2;
@@ -669,7 +700,7 @@ class StockController extends Controller
         $stock->quantite = $request->quantite;
 
         $produit = grosProduit::where('libelle', $request->libelle)
-        ->where('produitType_id', 1)
+        ->where('produitType_id', 2)
         ->first();
 
         $nouvelleQuantite = ($produit->quantite - $ancienStock );
@@ -697,7 +728,7 @@ class StockController extends Controller
         $stock->quantite = $request->quantite;
 
         $produit = grosProduit::where('libelle', $request->libelle)
-        ->where('produitType_id', 3)
+        ->where('produitType_id', 1)
         ->first();
 
         $nouvelleQuantite = ($produit->quantite - $ancienStock );

@@ -13,31 +13,39 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="date"><i class="fas fa-calendar-alt"></i> Date</label>
-                        <input type="date" id="date" class="form-control" style="border-radius: 10px;" onkeydown="return false">
+                        <input type="date" id="date" class="form-control" onkeydown="return false">
                     </div>
                 </div>
 
-                <!-- Sélection du Client -->
+               <!-- Sélection du Client -->
                 <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="client"><i class="fas fa-user"></i> Clients</label>
-                        <select class="form-control select2" id="client" required>
-                            <option></option>
-                            @foreach ($clients as $client)
-                                <option value="{{ $client->id }} {{ $client->nom }}" 
-                                        @if ($client->nom == 'Client') selected @endif>
-                                    {{ $client->nom }} {{ $client->prenom }}
-                                </option>
-                            @endforeach
-                        </select>
+                    <div class="form-group d-flex align-items-end">
+                        <div class="w-100">
+                            <label for="client"><i class="fas fa-user"></i> Clients</label>
+                            <select class="form-control select2 m-2" id="client" required>
+                                <option></option>
+                                @foreach ($clients as $client)
+                                    <option value="{{ $client->id }} {{ $client->nom }}" 
+                                            @if ($client->nom == 'Client') selected @endif>
+                                        {{ $client->nom }} {{ $client->prenom }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Bouton vers client.index -->
+                        <a href="{{ route('client.index') }}" class="btn btn-outline-info m-2" title="Gérer les clients">
+                            <i class="fas fa-arrow-circle-down"></i>
+                        </a>
                     </div>
                 </div>
+
 
                 <!-- Sélection du type de produit -->
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="produitType"><i class="fas fa-box"></i> Produit Type</label>
-                        <select class="form-control" id="produitType" style="border-radius: 10px;">
+                        <select class="form-control" id="produitType">
                             <option></option>
                             
                             @foreach ($produitTypes as $produitType)
@@ -65,7 +73,7 @@
                     <!-- Quantité -->
                     <div class="mb-3 col-md-4">
                         <label for="quantite"><i class="fas fa-sort-numeric-up"></i> Quantité</label>
-                        <input type="number" value="0" min="0" class="form-control" id="quantite" style="border-radius: 10px;">
+                        <input type="number" value="0" min="0" class="form-control" id="quantite">
                         <div id="messagePro" class="text-danger mt-1"></div>
                     </div>
 
@@ -80,20 +88,6 @@
             </form>
         </div>
 
-        <!-- CSS pour un style plus propre et uniforme (pour l'entete) -->
-        <style>
-           
-            .select2-container .select2-selection--single {
-                height: 38px !important;
-                border-radius: 15px !important;
-            }
-            
-            .btn-info:hover {
-                background-color: #138496;
-                border-color: #117a8b;
-            }
-        </style>
-
 
     <div class="invoice mt-4">
         <div class="table-responsive">
@@ -104,6 +98,7 @@
                         <th>Produit</th>
                         <th>Prix</th>
                         <th>Total</th>
+                        <th>Supprimer</th>
                     </tr>
                 </thead>
                 <tbody id="monTableauBody">
@@ -135,7 +130,7 @@
                         <td><input type="text" class="form-control" id="montantPaye" oninput="ajouterValider()"></td>
                     </tr>
                     <tr>
-                        <th>Reliquat :</th>
+                        <th>Solde à encaissé :</th>
                         <td><input type="text" class="form-control" id="montantRendu" disabled style="background:#eee;"></td>
                     </tr>
                     <tr>
@@ -495,7 +490,6 @@
         
         .select2-container .select2-selection--single {
             height: 38px !important;
-            border-radius: 15px !important;
         }
         
         .btn-info:hover {

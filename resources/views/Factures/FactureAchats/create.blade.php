@@ -61,7 +61,7 @@
 
                     <!-- Prix d'achat -->
                     <div class="col-md-2">
-                        <label for="prix" class="form-label text-dark"><i class="fas fa-tag"></i> Prix d'achat</label>
+                        <label for="prix" class="form-label text-dark"><i class="fas fa-tag"></i> Coût de revient</label>
                         <input type="number" min="0" step="0.01" id="prix" name="prix" class="form-control">
                     </div>
 
@@ -89,7 +89,7 @@
                         <tr>
                             <th>Quantité</th>
                             <th>Produit</th>
-                            <th>Prix d'achat</th>
+                            <th>Coût de revient</th>
                             <th>Prix de vente</th>
                             <th>Total</th>
                             <th>Bénéfice</th>
@@ -112,7 +112,7 @@
                             <table class="table table-borderless">
                                 <tbody>
                                     <tr>
-                                        <th class="text-dark"><i class="fas fa-tag"></i> Total prix d'achat :</th>
+                                        <th class="text-dark"><i class="fas fa-tag"></i> Total coût de revient :</th>
                                         <td id="totalAchat" class="fw-bold text-success">0.00 CFA</td>
                                     </tr>
                                     <tr>

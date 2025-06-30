@@ -7,11 +7,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
 
-    <title>G_STOCK</title>
+    <title>APAL TRADING</title>
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="../../../../AD/plugins/fontawesome-free/css/all.min.css">
     <!-- DataTables -->
@@ -30,8 +29,6 @@
   <link rel="stylesheet" href="../../../../AD/plugins/bs-stepper/css/bs-stepper.min.css">
    <!-- dropzonejs -->
    <link rel="stylesheet" href="../../../../AD/plugins/dropzone/min/dropzone.min.css">
-   <!-- Theme style -->
- 
    
     <!-- Select2 -->
   <link rel="stylesheet" href="../../../../AD/plugins/select2/css/select2.min.css">
@@ -63,6 +60,10 @@
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
+                            class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item">
                     <a href="{{route('logout')}}" class="nav-link">Me Déconnecter
                         <span class="right badge badge-danger">off</span>
                     </a>
@@ -83,7 +84,7 @@
             <!-- Brand Logo -->
             <a href="#" class="brand-link">
                 
-                <h4 class="text-center font-weight-light">G_STOCK</h4>
+                <h4 class="text-center font-weight-light">APAL TRADING</h4>
             </a>
 
             <!-- Sidebar -->
@@ -392,12 +393,12 @@
             $('#example2').DataTable({
             "paging": true,
             "lengthChange": false,
-            "searching": false,
+            "searching": true,
             "ordering": true,
             "info": true,
             "autoWidth": false,
-                   "order": [[1, 'desc']],  // Trier la deuxième colonne (index 1) qui est la date
-        "columnDefs": [
+            "order": [[1, 'desc']],  // Trier la deuxième colonne (index 1) qui est la date
+            "columnDefs": [
             {
                 "targets": 1,  // Index de la colonne de date
                 "orderDataType": "dom-text",  // Utilisation de "dom-text" pour trier les données

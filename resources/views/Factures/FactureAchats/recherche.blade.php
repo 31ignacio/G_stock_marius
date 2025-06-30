@@ -45,10 +45,24 @@
                         </form>
 
                         <div class="row">
-                            <div class="col-md-10"></div>
+                            <div class="col-md-8"></div>
 
+                             <div class="col-md-2 mt-3">
+                                <a class="btn btn-success" 
+                                    href="{{ route('factureAchat.genererExcel', [
+                                        'dateDebut' => request('dateDebut'),
+                                        'dateFin' => request('dateFin'),
+                                        'societe_id' => request('societe_id'),
+                                    ]) }}">
+                                    Exporter en Excel
+                                </a>
+
+                            </div>
                             <div class="col-md-2 mt-3">
-                                <button class="btn btn-danger mb-3" onclick="generatePDF()"><i class="fas fa-download"></i> Générer PDF</button>
+                                <a href="{{ route('factureAchat.genererPDF', ['dateDebut' => request('dateDebut'), 'dateFin' => request('dateFin'), 'societe_id' => request('societe_id')]) }}" 
+                                class="btn btn-danger">
+                                <i class="fas fa-download"></i> Générer PDF
+                                </a>
                             </div>
                         </div>
                         
@@ -56,7 +70,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <h5>
-                                        <i class="fas fa-globe"></i> <b>G_STOCK</b>.
+                                        <i class="fas fa-globe"></i> <b>APAL TRADING</b>.
                                         <small class="float-right">Date: {{ date('d/m/Y', strtotime($date)) }}
                                         </small>
                                     </h5>
@@ -69,8 +83,8 @@
                             </h6>
 
                             <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded">
-                                <p class="mb-0"><b>Total Divers :</b> {{ number_format($totalTTCType1, 0, ',', '.') }} CFA</p>
-                                <p class="mb-0"><b>Total poissonnerie :</b> {{ number_format($totalTTCType3, 0, ',', '.') }} CFA</p>
+                                <p class="mb-0"><b>Total Bénéfice Divers :</b> {{ number_format($totalTTCType1, 0, ',', '.') }} CFA</p>
+                                <p class="mb-0"><b>Total Bénéfice poissonnerie :</b> {{ number_format($totalTTCType3, 0, ',', '.') }} CFA</p>
                             </div>
                             
                         

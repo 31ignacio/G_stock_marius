@@ -8,7 +8,7 @@
       <div class="row">
         <div class="col-12">
           @if(auth()->user()->role_id == 1)
-            <a href="#" class="btn bg-gradient-primary" data-toggle="modal" data-target="#addUserModal">
+            <a href="#" class="btn btn-outline-primary" data-toggle="modal" data-target="#addUserModal">
                 <i class="fas fa-user-plus"></i> Ajouter un utilisateur
             </a>
           @endif
@@ -22,7 +22,7 @@
                 <div class="card bg-light d-flex flex-fill">
                   
                   <div class="card-header text-muted border-bottom-0 position-relative">
-                    <h2 class="text-center">G_Stock</h2>
+                    <h2 class="text-center">APAL TRADING</h2>
                     
                       <form action="{{ route('admin.toggleStatus', ['admin' => $admin->id]) }}" method="POST" class="position-absolute" style="top: 10px; right: 10px;">
                         @csrf

@@ -3,6 +3,24 @@
 @section('content')
     <section class="content">
         <div class="container-fluid">
+
+                <div class="row">
+                        
+                    <div class="col-md-8"></div>
+                    <div class="col-md-2">
+                        <!-- Utilisez une colonne de taille moyenne pour aligner les boutons à gauche -->
+                        <a href="{{ route('stock.entrerPoissonerie') }}" class="btn btn-outline-primary mt-3" ><i
+                                class="fas fa-archive"></i> Entrée de stock</a><br><br>
+                    </div>
+                    <div class="col-md-2">
+                        <!-- Utilisez une colonne de taille moyenne pour aligner les boutons à gauche -->
+                        <a href="{{ route('stock.actuelPoissonerie') }}" class="btn btn-outline-success mt-3" title="Voir le stock actuel"><i
+                                class="fas fa-archive"></i> Stocks actuels</a><br><br>
+                    </div>
+                    
+                </div>
+
+
             <div class="row">
                 <div class="col-12">
 

@@ -86,6 +86,17 @@
 </head>
 <body>
     <div class="login-container">
+        @if (Session::get('success_message'))
+        <b style="font-size:15px; color:#fff">{{ Session::get('success_message') }}</b>
+        @endif
+
+        @if (Session::get('error_message'))
+            <b style="font-size:15px; color:rgb(177, 0, 0)">{{ Session::get('error_message') }}</b>
+        @endif
+        <br><br>
+        <hr>
+        <br>
+
         <h2>Connexion</h2>
         <form method="post" action="{{ route('handleLogin') }}">
             @csrf

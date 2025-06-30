@@ -10,7 +10,7 @@
       <div class="row">
         <div class="col-12">
 
-          <a href="#" class="btn bg-gradient-primary" data-toggle="modal" data-target="#addUserModal">
+          <a href="#" class="btn btn btn-outline-primary" data-toggle="modal" data-target="#addUserModal">
             <i class="fas fa-user-plus"></i> Ajouter un client
           </a><br><br>
            
@@ -29,12 +29,12 @@
                   <th>Nom</th>
                   <th>Téléphone</th>
                   <th>Ville</th>
-                  <th>Transaction</th>
+                  <th>Actions</th>
 
                 </tr>
                 </thead>
                 <tbody>
-                    @forelse ($clients as $client)
+                  @forelse ($clients as $client)
 
                 <tr>
                   <td>{{ $loop->iteration }}</td>
@@ -44,21 +44,19 @@
                   <td>{{ $client->ville }}</td>
 
                   <td>
-                    <a href="{{ route('client.detail', ['client' => $client->id]) }}" class="btn-sm btn-primary"><i class="fas fa-eye"></i></a>
-                    <a href="#!" data-toggle="modal" data-target="#editEntry{{ $loop->iteration }}" class="btn-sm btn-warning mx-1"><i class="fas fa-edit"></i></a>
+                    <a href="{{ route('client.detail', ['client' => $client->id]) }}" class="btn btn-sm btn-primary" title="Voir les détails du client"><i class="fas fa-eye"></i></a>
+                    <a href="#!" data-toggle="modal" data-target="#editEntry{{ $loop->iteration }}" class="btn btn-sm btn-warning m-2" title="Modifier le client"><i class="fas fa-edit"></i></a>
 
-                    @auth
-                    @if(auth()->user()->role_id == 1)
+                    @if(auth()->user()->role_id == 1 || auth()->user()->role_id == 3)
                    
                       <form action="{{ route('client.delete', ['client' => $client->id]) }}" method="POST" style="display: inline;">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce client ?')">
+                        <button type="submit" class="btn btn-sm btn-danger" title="Supprimer le client" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce client ?')">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                       </form>                 
                     @endif
-                    @endauth
                   </td>
                 </tr>
                 @empty

@@ -3,8 +3,26 @@
 @section('content')
     <section class="content">
         <div class="container-fluid">
+
+            <div class="row">
+                        
+                    <div class="col-md-8"></div>
+                    <div class="col-md-2">
+                        <!-- Utilisez une colonne de taille moyenne pour aligner les boutons à gauche -->
+                        <a href="{{ route('stock.entrer') }}" class="btn btn-outline-primary mt-3" ><i
+                                class="fas fa-archive"></i> Entrée de stock</a><br><br>
+                    </div>
+                    <div class="col-md-2">
+                        <!-- Utilisez une colonne de taille moyenne pour aligner les boutons à gauche -->
+                        <a href="{{ route('stock.actuel') }}" class="btn btn-outline-success mt-3" title="Voir le stock actuel"><i
+                                class="fas fa-archive"></i> Stocks actuels</a><br><br>
+                    </div>
+                    
+                </div>
             <div class="row">
                 <div class="col-12">
+
+
 
                     <div class="card">
                         <div class="card-header">
@@ -80,32 +98,6 @@
             }
             
         </style>
-
-
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha384-o6R3mBSB/q5FvB9RL+DyZD+g3tTPO9P1bxDjCIOtv8yD4QKPIrPCw/tFbk8smJ9Y" crossorigin="anonymous"></script>
-    <!-- CSS de Select2 -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <!-- JS de Select2 -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <!-- jQuery (nécessaire pour Select2) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-
-    <script>
-      $(document).ready(function () {
-          // Initialisation standard de Select2
-          $('.select2').select2({
-              placeholder: "Sélectionnez une option",
-              allowClear: true,
-          });
-
-          // Réinitialiser Select2 lors de l'ouverture du modal
-          $('#stockEntryModal').on('shown.bs.modal', function () {
-              $('.select2').select2({
-                  dropdownParent: $('#stockEntryModal'), // Permet de s'assurer que le menu apparaît dans le modal
-              });
-          });
-      });
-    </script>
+ 
 
 @endsection

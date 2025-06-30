@@ -3,14 +3,6 @@
 @section('content')
     <section class="content">
         <div class="container-fluid">
-            <a href="{{ route('facture.point') }}"
-                class="btn btn-lg btn-outline-primary shadow-sm px-4 py-2 d-inline-flex align-items-center gap-2 animate__animated animate__pulse animate__infinite"
-                style="border-width: 2px; font-weight: 600;">
-                    <i class="fas fa-chart-line" style="font-size: 20px; color: #0d6efd;"></i>
-                    <span style="color: #0d6efd;">🔵 Voir les ventes d'hier</span>
-            </a><br><br>
-
-            
             
             <div class="card table-responsive">
                 <div class="card-header">
@@ -50,8 +42,9 @@
                                 <th>Client</th>
                                 <th>Date</th>
                                 <th>Total TTC</th>
-                                <th>Montant Perçu</th>
-                                <th>Reliquat</th>
+                                <th>Encaissé</th>
+                                <th>Montant Final</th>
+                                {{-- <th>Reliquat</th> --}}
                                 <th>Type</th>
                                 <th>Caissier</th>
                                 <th>Actions</th>
@@ -64,11 +57,12 @@
                                         <td>{{ $factureUnique->code }}</td>
                                         <td>{{ $factureUnique->client_nom }}</td>
                                         <td data-date="{{ $factureUnique->date }}">{{ date('d/m/Y', strtotime($factureUnique->date)) }}</td>
-                                        <td>{{ $factureUnique->montantFinal }}</td>
+                                        <td>{{ $factureUnique->totalTTC }}</td>
                                         <td>{{ $factureUnique->montantPaye }}</td>
-                                        <td>
+                                        <td>{{ $factureUnique->montantFinal }}</td>
+                                        {{-- <td>
                                             {{ $factureUnique->montantPaye - $factureUnique->montantFinal }}
-                                        </td>
+                                        </td> --}}
 
                                         <td>
                                             @if($factureUnique->produitType_id == 2)

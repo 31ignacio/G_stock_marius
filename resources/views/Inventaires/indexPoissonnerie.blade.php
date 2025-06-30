@@ -2,216 +2,103 @@
 
 @section('content')
 
-    <section class="content" >
-        <div class="container">
+<section class="content">
+    <div class="container">
 
-            <div class="row">
-                <div class="col-md-10"></div>
-                <div class="col-md-2 mt-3">
-                <button class="btn btn-danger" onclick="generatePDF()"><i class="fas fa-download"></i> Générer PDF</button>
-                </div>
+        {{-- Bouton PDF --}}
+        <div class="row">
+            <div class="col-md-10"></div>
+            <div class="col-md-2 mt-3">
+                <button class="btn btn-danger" onclick="generatePDF()">
+                    <i class="fas fa-download"></i> Générer PDF
+                </button>
             </div>
+        </div>
 
-
-            <div class="row">
-                <div class="col-12 mt-4">
-
-                    
-
-                    <div class="card" id="my-table"><br>
-                        <div class="row">
-                            <div class="col-12 mt-5">
-                                <h5>
-                                    <i class="fas fa-globe mx-3"></i> <b>Léoni's Superette</b> <br>
-                                    <small class="float-right mx-5"><b>Date:</b> {{ date('d/m/Y', strtotime($today)) }}</small><br><br>
-                                    <small class="float-left mx-5"><b>IFU :</b> 01234567891011</small><br>
-                                    <small class="float-left mx-5"><b>Téléphone :</b> (229) 0196472907 / 0161233719 </small>
-                                </h5>
-                            </div>
-                            <!-- /.col -->
-                        </div>
-
-                        <div class="card-header">
-                            <h5 class="text-center"><b> Écart d'inventaire Poissonnerie du {{ date('d/m/Y', strtotime($today)) }}</b></h5>
-                        </div>
-
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                            
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-hover">
-                                    <thead class="text-black">
-                                        <tr>
-                                            <th>Produits</th>
-                                            <th>Type</th>
-                                            <th>Stock actuel</th>
-                                            <th>Stock Physique</th>
-                                            <th>Écart d'Inventaire</th>
-                                            <th>PU</th>
-                                            <th>Montant d'écart</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="inventaireTableBody">
-                                        @foreach ($produits as $produit)
-                                        <tr>
-                                            <td>{{ $produit->libelle }}</td>
-                                            <td>
-                                                @if( $produit->produitType_id == 3)
-                              
-                                                    <span class="text-warning">POISSONNERIE</span>
-
-                                                
-                                                @endif
-
-                                            </td>
-                                            <td>{{ number_format($produit->stock_actuel, 2, ',', ' ') }}</td>
-                                            <td>
-                                                <input type="number" step="0.01" class="form-control stock-physique" 
-                                                    data-stock-actuel="{{ $produit->stock_actuel }}" 
-                                                    data-prix="{{ $produit->prix }}" 
-                                                    placeholder="Saisir le stock physique">
-                                            </td>
-                                            <td class="ecart-inventaire">0.00</td>
-                                            <td>{{ number_format($produit->prix, 2, ',', ' ') }} FCFA</td>
-                                            <td class="montant-ecart">0.00 FCFA</td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                    <tfoot class="bg-light">
-                                        <tr>
-                                            <td colspan="5" class="text-right font-weight-bold">Total Montant d'écart :</td>
-                                            <td colspan="2" id="totalEcart" class="font-weight-bold text-danger">0.00 FCFA</td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                            
-                            <!-- Bouton pour afficher les produits avec écart -->
-                            <div class="mt-3">
-                                <button class="btn btn-warning" id="afficherEcart">Afficher les produits avec écart d'inventaire</button>
-                            </div>
-                            
-                            <!-- Tableau des produits avec écart -->
-                            <div id="produitsAvecEcartTable" class="table-responsive mt-4" style="display: none;">
-                                <h5 class="text-center text-danger">Produits avec écart d'inventaire</h5>
-                                <table class="table table-bordered table-striped table-hover">
-                                    <thead class="bg-danger text-dark">
-                                        <tr>
-                                            <th>Produits</th>
-                                            <th>Stock actuel</th>
-                                            <th>Stock Physique</th>
-                                            <th>Écart d'Inventaire</th>
-                                            <th>PU</th>
-                                            <th>Montant d'écart</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="ecartsProduitsBody"></tbody>
-                                </table>
-                            </div>
-                            
-                            
-
-                        </div>
-                        <!-- /.card-body -->
+        {{-- Titre --}}
+        <div class="row">
+            <div class="col-12 mt-4">
+                <div class="card" id="my-table">
+                    <div class="card-header text-center">
+                        <h5><b>Écart d'inventaire Poissonnerie du {{ date('d/m/Y', strtotime($today)) }}</b></h5>
                     </div>
 
-                <!-- /.card -->
-                </div>
-                <!-- /.col -->
-            </div>
-                <!-- /.row -->
-        </div>
-        <!-- /.container-fluid -->
-    </section>
-    <!-- JavaScript -->
-    {{-- Mon js pour inventaire --}}
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const inputs = document.querySelectorAll(".stock-physique");
-            const totalEcartElement = document.getElementById("totalEcart");
-            const afficherEcartButton = document.getElementById("afficherEcart");
-            const ecartsProduitsBody = document.getElementById("ecartsProduitsBody");
-    
-            let totalEcart = 0;
-    
-            // Gérer les changements dans les champs de stock physique
-            inputs.forEach(input => {
-                input.addEventListener("input", () => {
-                    const row = input.closest("tr");
-                    const stockActuel = parseFloat(input.dataset.stockActuel || 0);
-                    const prix = parseFloat(input.dataset.prix || 0);
-                    const stockPhysique = parseFloat(input.value || 0);
-    
-                    // Calcul de l'écart
-                    const ecart = stockPhysique - stockActuel;
-                    const montantEcart = ecart * prix;
-    
-                    // Mettre à jour les cellules correspondantes
-                    row.querySelector(".ecart-inventaire").textContent = ecart.toLocaleString("fr-FR", { useGrouping: true, maximumFractionDigits: 0 });
-                    const montantCell = row.querySelector(".montant-ecart");
-                    montantCell.textContent = `${montantEcart.toLocaleString("fr-FR", { useGrouping: true, maximumFractionDigits: 0 })} FCFA`;
-    
-                    // Ajouter ou supprimer la classe rouge si montantEcart est 0
-                    if (montantEcart === 0) {
-                        montantCell.classList.add("text-danger");
-                    } else {
-                        montantCell.classList.remove("text-danger");
-                    }
-    
-                    // Recalculer le total des écarts
-                    recalculerTotalEcart();
-                });
-            });
-    
-            // Fonction pour recalculer le total des montants d'écart
-            function recalculerTotalEcart() {
-                totalEcart = 0;
-    
-                document.querySelectorAll(".montant-ecart").forEach(cell => {
-                    const montant = parseFloat(cell.textContent.replace(/[^\d.-]/g, "")) || 0;
-                    totalEcart += montant;
-                });
-    
-                totalEcartElement.textContent = `${totalEcart.toLocaleString("fr-FR", { useGrouping: true, maximumFractionDigits: 0 })} FCFA`;
-            }
-    
-            // Afficher les produits avec un écart d'inventaire
-            afficherEcartButton.addEventListener("click", () => {
-                ecartsProduitsBody.innerHTML = ""; // Réinitialiser le tableau
-    
-                document.querySelectorAll("#inventaireTableBody tr").forEach(row => {
-                    const ecart = parseFloat(row.querySelector(".ecart-inventaire").textContent.replace(",", ".") || 0);
-    
-                    if (ecart !== 0) {
-                        const produit = row.querySelector("td:first-child").textContent;
-                        const stockActuel = row.querySelector("td:nth-child(3)").textContent;
-                        const stockPhysique = row.querySelector(".stock-physique").value;
-                        const prix = row.querySelector("td:nth-child(6)").textContent;
-                        const montantEcart = row.querySelector(".montant-ecart").textContent;
-    
-                        // Créer une nouvelle ligne pour le tableau des écarts
-                        const newRow = document.createElement("tr");
-                        newRow.innerHTML = `
-                            <td>${produit}</td>
-                            <td>${stockActuel}</td>
-                            <td>${parseFloat(stockPhysique).toLocaleString("fr-FR", { useGrouping: true, maximumFractionDigits: 0 })}</td>
-                            <td class="text-danger font-weight-bold">${ecart.toLocaleString("fr-FR", { useGrouping: true, maximumFractionDigits: 0 })}</td>
-                            <td>${prix}</td>
-                            <td class="text-danger font-weight-bold">${montantEcart}</td>
-                        `;
-    
-                        ecartsProduitsBody.appendChild(newRow);
-                    }
-                });
-    
-                // Afficher le tableau des écarts
-                document.getElementById("produitsAvecEcartTable").style.display = "block";
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <i class="fas fa-globe mx-2"></i> <b>APAL TRADING</b><br>
+                                <small><b>IFU :</b> 01234567891011</small><br>
+                                <small><b>Téléphone :</b> (229) 0196472907 / 0161233719</small>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <small><b>Date :</b> {{ date('d/m/Y', strtotime($today)) }}</small>
+                            </div>
+                        </div>
+
+                        {{-- Tableau --}}
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover">
+                                <thead class="bg-light text-black">
+                                    <tr>
+                                        <th>Produits</th>
+                                        <th>Type</th>
+                                        <th>Stock théorique</th>
+                                        <th>Stock réel</th>
+                                        <th>Écart d'Inventaire</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventaireTableBody">
+                                    @foreach ($produits as $produit)
+                                    <tr>
+                                        <td>{{ $produit->libelle }}</td>
+                                        <td>
+                                            @if($produit->produitType_id == 1)
+                                                <span class="text-warning">POISSONNERIE</span>
+                                            @endif
+                                        </td>
+                                        <td>{{ number_format($produit->stock_actuel, 2, ',', ' ') }}</td>
+                                        <td>
+                                            <input type="number" step="0.01" class="form-control stock-physique"
+                                                data-stock-actuel="{{ $produit->stock_actuel }}"
+                                                placeholder="Saisir le stock réel">
+                                        </td>
+                                        <td class="ecart-inventaire">0,00</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div> {{-- card-body --}}
+                </div> {{-- card --}}
+            </div> {{-- col --}}
+        </div> {{-- row --}}
+    </div> {{-- container --}}
+</section>
+
+{{-- JS --}}
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const inputs = document.querySelectorAll(".stock-physique");
+
+        inputs.forEach(input => {
+            input.addEventListener("input", () => {
+                const row = input.closest("tr");
+                const stockActuel = parseFloat(input.dataset.stockActuel || 0);
+                const stockPhysique = parseFloat(input.value || 0);
+                const ecart = stockPhysique - stockActuel;
+
+                row.querySelector(".ecart-inventaire").textContent =
+                    ecart.toLocaleString("fr-FR", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
             });
         });
-    </script>
-    
+    });
+</script>
 
-    {{-- Mon js pour pdf --}}
+{{-- Mon js pour pdf --}}
     <script>
         // Fonction pour générer le PDF
         function generatePDF() {
@@ -283,8 +170,5 @@
                 .save(); // Télécharger le PDF
         }
     </script>
-    
-    
-    
+
 @endsection
-  

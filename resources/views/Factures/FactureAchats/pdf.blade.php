@@ -414,7 +414,7 @@
     <div id="container">
         <div id="header" style="padding-top: 8%">
             <div id="logo">
-                <i class="logo-text">G_STOCK</i>
+                <i class="logo-text">APAL TRADING</i>
                 {{-- <img style="pointer-events: none; position: relative; height: 80%; z-index: -1;" src="logo.jpg" alt="Léoni's"> --}}
             </div>
             

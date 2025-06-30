@@ -83,7 +83,7 @@
 <body>
     <div class="invoice">
         <div class="invoice-header">
-            <h5><b>G_STOCK</b></h5>
+            <h5><b>APAL TRADING</b></h5>
             <p>Date: {{ date('d/m/Y', strtotime($date)) }}</p>
         </div>
 
@@ -177,9 +177,9 @@
 
         <div class="thank-you">
             Merci pour votre achat ! <br>
-            À bientôt chez <b>G_STOCK</b>.
+            À bientôt chez <b>APAL TRADING</b>.
             <hr>
-              <small> Tél : 0161105005 / 0194515453 </small>
+              <small> Tél : 0101010101 / 0102020202 </small>
         </div>
     </div>
        

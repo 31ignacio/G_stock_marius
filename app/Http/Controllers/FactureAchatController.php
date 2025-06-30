@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\FactureAchatExport;
 use App\Models\FactureAchat;
 use App\Models\grosProduit;
 use App\Models\ProduitType;
@@ -13,6 +14,8 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 
 
@@ -54,7 +57,6 @@ class FactureAchatController extends Controller
     */
     public function store(Request $request)
     { 
-
         if (Auth::check()) {
             $donnees = json_decode($request->input('donnees'));
             $societe_id = $request->societe;
@@ -66,43 +68,42 @@ class FactureAchatController extends Controller
 
             // Récupérer le dernier numéro de facture enregistré
             $dernierNumero = DB::table('facture_achats')->max('id'); 
-
             // Si aucune facture, on commence à 1, sinon on incrémente
             $nouveauNumero = $dernierNumero ? $dernierNumero + 1 : 1;
-
             $code = str_pad($nouveauNumero, 6, '0', STR_PAD_LEFT); // Format avec des zéros (ex: Facture_000001)
-
             $date = new DateTime($dateString);
 
-        
-            try {
-                foreach ($donnees as $donnee) {
-                    
-                    // Création de la facture
-                    $facture = new FactureAchat();
-                    $facture->societe_id = $societe_id;
-                    $facture->date = $date;
-                    $facture->totalAchat = $totalAchat;
-                    $facture->totalVente = $totalVente;
-                    $facture->totalBenefice = $totalBenefice;
-                    $facture->quantite = $donnee->quantite;
-                    $facture->benefice = $donnee->benefice;
-                    $facture->produit = $donnee->produit;
-                    $facture->prix = $donnee->prixAchat;
-                    $facture->prixVente = $donnee->prixVente;
-                    $facture->total = $donnee->total;
-                    $facture->code = $code;
-                    $facture->produitType_id = $produitType;
+           try {
+    foreach ($donnees as $donnee) {
+        // Création de la facture
+        $facture = new FactureAchat();
+        $facture->societe_id = $societe_id;
+        $facture->date = $date;
+        $facture->totalAchat = $totalAchat;
+        $facture->totalVente = $totalVente;
+        $facture->totalBenefice = $totalBenefice;
+        $facture->quantite = $donnee->quantite;
+        $facture->benefice = $donnee->benefice;
+        $facture->produit = $donnee->produit;
+        $facture->prix = $donnee->prixAchat;
+        $facture->prixVente = $donnee->prixVente;
+        $facture->total = $donnee->total;
+        $facture->code = $code;
+        $facture->produitType_id = $produitType;
+        $facture->user_id = Auth::user()->id;
+        $facture->save();
 
-                    $facture->user_id = Auth::user()->id;
+        // ✅ Mise à jour du prix dans la table gros_produits
+        grosProduit::where('libelle', $donnee->produit)
+            ->update(['prix' => $donnee->prixVente, 'prixAchat' => $donnee->prixAchat]);
 
-                    $facture->save();
-                }
+    }
 
-                return response()->json(['message' => 'Facture d\'achat enregistrée avec succès'], 200);
-            } catch (Exception $e) {
-                return response()->json(['error_message' => 'Une erreur est survenue lors de l\'enregistrement.'], 500);
-            }
+    return response()->json(['message' => 'Facture d\'achat enregistrée avec succès'], 200);
+} catch (Exception $e) {
+    return response()->json(['error_message' => 'Une erreur est survenue lors de l\'enregistrement.'], 500);
+}
+
                             
         } else {
             return redirect()->route('login')->with('success_message', 'Veuillez vous connecter pour accéder à cette page.');
@@ -159,12 +160,12 @@ class FactureAchatController extends Controller
 
         // Calcul des totaux par type de produit
         $totalTTCType1 = $codesFacturesUniques
-            ->filter(fn($facture) => $facture->produitType_id == 1)
-            ->sum('totalTTC');
+            ->filter(fn($facture) => $facture->produitType_id == 2)
+            ->sum('totalBenefice');
 
         $totalTTCType3 = $codesFacturesUniques
-            ->filter(fn($facture) => $facture->produitType_id == 3)
-            ->sum('totalTTC');
+            ->filter(fn($facture) => $facture->produitType_id == 1)
+            ->sum('totalBenefice');
 
         $date = Carbon::now();
         $societes = Societe::all();
@@ -187,7 +188,7 @@ class FactureAchatController extends Controller
         return back()->with('success_message', 'La facture d\'achat a été annulée avec succès.');
     }
 
-
+    //Pdf facture achat
     public function pdf($code, $date)
     {
          // Définir la locale de Carbon à français
@@ -210,6 +211,63 @@ class FactureAchatController extends Controller
         ])->setPaper('a4', 'portrait');
     
         return $pdf->download('Facture-' . $code . '.pdf');
+    }
+    // PDF facture recherche
+    public function genererPDF(Request $request)
+    {
+        $dateDebut = $request->get('dateDebut');
+        $dateFin = $request->get('dateFin');
+        $societeId = $request->get('societe_id');
+
+        // Récupération des factures selon le filtre
+        $query = FactureAchat::with(['user','societe'])
+            ->whereBetween('date', [$dateDebut, $dateFin]);
+
+
+        if ($societeId) {
+            $query->where('societe_id', $societeId);
+        }
+
+        $codesFacturesUniques = $query->select('code','date','societe_id','user_id','produitType_id','totalBenefice','totalAchat','totalVente')
+            ->groupBy('code','date','societe_id','user_id','produitType_id','totalBenefice','totalAchat','totalVente')
+            ->get();
+
+            //dd($codesFacturesUniques);
+
+        $totalTTCType1 = $codesFacturesUniques
+            ->where('produitType_id', 2) // Adapter selon ta convention
+            ->sum('totalBenefice');
+            
+
+        $totalTTCType3 = $codesFacturesUniques
+            ->where('produitType_id', 1) // Adapter selon ta convention
+            ->sum('totalBenefice');
+
+
+        $pdf = Pdf::loadView('Factures.FactureAchats.sommaire_pdf', compact(
+            'codesFacturesUniques',
+            'dateDebut',
+            'dateFin',
+            'totalTTCType1',
+            'totalTTCType3'
+        ));
+
+        return $pdf->download("facture_achats_{$dateDebut}_{$dateFin}.pdf");
+    }
+
+    /**
+     * EXCEL pour sommation
+     */
+     public function genererExcel(Request $request)
+    {
+        $dateDebut = $request->get('dateDebut');
+        $dateFin = $request->get('dateFin');
+        $societeId = $request->get('societe_id');
+
+        return \Maatwebsite\Excel\Facades\Excel::download(
+            new FactureAchatExport($dateDebut, $dateFin, $societeId),
+            "facture_achats_{$dateDebut}_{$dateFin}.xlsx"
+        );
     }
 
 }

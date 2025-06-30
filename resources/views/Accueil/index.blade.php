@@ -55,16 +55,22 @@
             <div class="col-md-3">
                 <div class="card shadow border-0 text-white" style="background: linear-gradient(135deg, #4e54c8, #8f94fb);">
                     <div class="card-body d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="mb-1">Total Ventes</h6>
-                            <h2 class="font-weight-bold">{{ $totalMontantFinal }} CFA</h2>
-                        </div>
-                        <i class="fas fa-coins fa-3x opacity-75"></i>
+                        @if (auth()->user()->role_id == 1 || auth()->user()->role_id == 3)
+                            <div>
+                                <h6 class="mb-1">Total Ventes</h6>
+                                <h2 class="font-weight-bold">{{ number_format($totalMontantFinal, 0, ',', '.') }} CFA</h2>
+                            </div>
+                            <i class="fas fa-coins fa-3x opacity-75"></i>
+                        @else
+                            <div>
+                                <h6 class="mb-1">Total Ventes</h6>
+                                <h2 class="font-weight-bold">- - -</h2>
+                            </div>
+                            <i class="fas fa-coins fa-3x opacity-75"></i>
+                        @endif
                     </div>
                     <div class="card-footer text-white text-center border-0">
-                        @if (auth()->user()->role_id == 1 || auth()->user()->role_id == 3)
-                            <a href="{{ route('facture.index') }}" class="text-white">Voir les ventes <i class="fas fa-arrow-right"></i></a>
-                        @endif
+                        <a href="{{ route('facture.index') }}" class="text-white">Voir les ventes <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -110,7 +116,8 @@
                             <th>Type</th>
                             <th>Date</th>
                             <th>Total TTC</th>
-                            <th>Montant Reçu</th>
+                            <th>Encaissé</th>
+                            <th>Montant Final</th>
                             <th>Reliquat</th>
                             <th>Caissier</th>
                             <th>Actions</th>
@@ -129,9 +136,11 @@
                                     @endif
                                 </td>
                                 <td>{{ date('d/m/Y', strtotime($facture->date)) }}</td>
-                                <td>{{ number_format($facture->montantFinal, 0, ',', '.') }} CFA</td>
+                                <td>{{ number_format($facture->totalTTC, 0, ',', '.') }} CFA</td>
                                 <td>{{ number_format($facture->montantPaye, 0, ',', '.') }} CFA</td>
-                                <td>{{ number_format($facture->montantPaye - $facture->montantFinal, 0, ',', '.') }} CFA</td>
+                                <td>{{ number_format($facture->montantFinal, 0, ',', '.') }} CFA</td>
+
+                                <td>{{ number_format($facture->montantRendu, 0, ',', '.') }} CFA</td>
                                 <td><strong>{{ $facture->user->name }}</strong></td>
                                 <td>
                                     <a href="{{ route('facture.details', ['code' => $facture->code, 'date' => $facture->date]) }}"

@@ -6,23 +6,23 @@
 <section class="content">
 
     <div class="row">
-            
+            <div class="col-md-1"></div>
         <div class="col-md-4">
             <form id="addUserForm" method="POST" action="{{ route('societe.store') }}">
                 @csrf
                 
-                    <div class="form-group">
-                        <label>Ajouter une société</label>
-                        <input type="text" class="form-control" placeholder="Entrez la société" style="border-radius: 10px;" id="categorie" name="societe" required>
-                    </div>
-                
-                    <button type="submit" class="btn btn-sm btn-primary" style="margin-top:8px;"><i class="fas fa-plus-circle"></i>Ajouter</button>   
+                <div class="form-group">
+                    <label>Ajouter une société</label>
+                    <input type="text" class="form-control" placeholder="Entrez la société" style="border-radius: 10px;" id="categorie" name="societe" required>
+                </div>
+            
+                <button type="submit" class="btn btn-sm btn-primary" style="margin-top:8px;"><i class="fas fa-plus-circle"></i>Ajouter</button>   
     
             </form>
         </div>
 
         
-        <div class="col-md-8">
+        <div class="col-md-7">
           
             <div class="card-body">
                 <table class="table table-bordered">
@@ -41,12 +41,12 @@
                                 <td>{{$societe->societe}}</td>
                             
                                 <td> 
-                                    <a href="#!" data-toggle="modal" data-target="#editEntry{{ $loop->iteration }}" class="btn-sm btn-warning mx-1"><i class="fas fa-edit"></i></a>
+                                    <a href="#!" data-toggle="modal" data-target="#editEntry{{ $loop->iteration }}" class="btn-sm btn-warning m-2" title="Editer la société"><i class="fas fa-edit"></i></a>
                                     <form action="{{ route('societe.delete', $societe->id) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette société ?')">
-                                            <i class="fas fa-trash-alt"></i>
+                                        <button type="submit" class="btn-sm btn-danger m-2" title="Supprimer la société" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette société ?')">
+                                            <i class="fas fa-trash-alt"></i> 
                                         </button>
                                     </form>
                                 </td>

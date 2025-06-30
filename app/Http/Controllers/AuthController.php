@@ -27,14 +27,11 @@ class AuthController extends Controller
                 return redirect()->route('accueil.index'); // Rediriger vers l'accueil si actif
             } else {
                 Auth::logout(); // Déconnecter l'utilisateur
-                return redirect()->back()->with('error_msg', 'Votre compte est désactivé. Veuillez contacter l\'administrateur.');
+                return redirect()->back()->with('error_message', 'Votre compte est désactivé. Veuillez contacter l\'administrateur.');
             }
         } else {
-            return redirect()->back()->with('error_msg', 'Paramètres de connexion non reconnus');
+            return redirect()->back()->with('error_message', 'Paramètres de connexion non reconnus');
         }
     }
-    
-    
-
-  
+      
 }

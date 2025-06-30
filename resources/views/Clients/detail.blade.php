@@ -46,12 +46,7 @@
                                         <th id="montant">Total TTC</th>
                                         <th>Montant Perçu</th>
                                         <th>Reliquat</th>
-                                        @auth
-                                        @if(auth()->user()->role_id === 1)
-                                      
                                         <th>Caissier</th>
-                                        @endif
-                                        @endauth
                                         <th>Actions</th>
 
                                     </tr>
@@ -65,16 +60,9 @@
                                             <td>{{ $client->montantFinal }}</td>
                                             <td>{{ $client->montantPaye }}</td>
                                             <td><b>{{ $client->montantPaye - $client->montantFinal}}</b></td>
-
-                                            @auth
-                                            @if(auth()->user()->role_id === 1)
-                                          
                                             <td><b>{{ $client->user->name}}</b></td>
-                                            @endif
-                                            @endauth
-                                           
                                             <td>
-                                                <a href="{{ route('facture.details', ['code' => $client->code, 'date' => $client->date]) }}" class="btn-sm btn-primary">Détail</a>
+                                                <a href="{{ route('facture.details', ['code' => $client->code, 'date' => $client->date]) }}" class="btn btn-outline-primary"><i class="fas fa-eye"></i> Détails</a>
                                             </td>
                                         </tr>
                                     @empty

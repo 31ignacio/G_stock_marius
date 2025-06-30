@@ -103,35 +103,6 @@ class FactureController extends Controller
         return view('Factures.recherche', compact('factures','totalTTCType1','totalTTCType3','date','codesFacturesUniques', 'dateDebut', 'dateFin'));
     }
 
-    public function point()
-    {
-        $user = Auth::user();
-        $nom = $user->name;
-        $role=$user->role_id;
-        $role_id = $user->role_id;
-        $user_id = $user->id;
-       
-        $factures = Facture::where('user_id', $user_id)->get();
-        $facture = Facture::all();
-
-        $codesFacturesUniquesTout = $facture->unique(function ($factur) {
-            return $factur->code . $factur->date . $factur->totalTTC . $factur->montantPaye . $factur->mode;
-        })->sortByDesc('date');
-
-           $codesFacturesUniques = $factures->unique(function ($facture) {
-                return $facture->code . $facture->date . $facture->totalTTC . $facture->montantPaye . $facture->mode;
-            })->sortByDesc('date');
-            
-            $facturesHier = $codesFacturesUniques->where('date', Carbon::yesterday());
-            $facturesHierToutPoissonnerie = $codesFacturesUniquesTout->where('date', Carbon::yesterday())->where('produitType_id',1);
-            $facturesHierToutDivers = $codesFacturesUniquesTout->where('date', Carbon::yesterday())->where('produitType_id',2);
-
-            $sommeMontantHierPoissonnerie = $facturesHierToutPoissonnerie->sum('total');
-            $sommeMontantHierDivers = $facturesHierToutDivers->sum('total');
-
-        return view('Factures.point', compact('user', 'facturesHier','nom','role','sommeMontantHierPoissonnerie','sommeMontantHierDivers'));
-    }
-
     /**
      * Afficher les details d'une facture
      */
@@ -215,7 +186,7 @@ class FactureController extends Controller
         $client_id_full = $request->client;
         $parts = explode(' ', $client_id_full);
         $client_id = $parts[0] ?? null;
-        $client_nom = $parts[1] ?? 'Inconnu';
+       $client_nom = !empty($parts) ? implode(' ', array_slice($parts, 1)) : 'Inconnu';
         $dateString = $request->date;
         $date = new DateTime($dateString);
         $totalHT = $request->totalHT;
@@ -226,7 +197,6 @@ class FactureController extends Controller
         $remise = $request->remise;
         $montantFinal = $request->montantFinal;
         $montantRendu = $request->montantRendu;
-
         $produitType = $request->produitType;
         $idUser = Auth::user()->id;
 
@@ -375,7 +345,6 @@ class FactureController extends Controller
     /**
      * EXCEL pour sommation
      */
-
      public function genererExcel(Request $request)
     {
         $dateDebut = $request->get('dateDebut');

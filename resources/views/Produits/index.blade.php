@@ -7,7 +7,7 @@
       <div class="row">
         <div class="col-12">
 
-            <a href="#" type="button" class="btn bg-gradient-primary" data-toggle="modal" data-target="#modal-xl">
+            <a href="#" type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal-xl">
               Ajouter Produit
             </a><br><br><br>
           
@@ -23,7 +23,8 @@
                   <th>#</th>
                   <th>Code</th>
                   <th>Produits</th>
-                   <th>Types</th>
+                  <th>Types</th>
+                  <th>Prix de vente</th>
                   <th>Actions</th>
 
                 </tr>
@@ -42,17 +43,18 @@
                             <span class="badge badge-warning text-dark">Divers</span>
                         @endif
                       </td>
+                      <td> {{ $produit->prix }}</td>
                       <td>
-                        <a class="btn-sm btn-primary mx-1" href="#" data-toggle="modal" data-target="#showEntree{{ $loop->iteration }}" title="Voir les détails">
-                          <i class="fas fa-eye"></i> 
+                        <a class="btn btn-sm btn-primary m-2" href="#" data-toggle="modal" data-target="#showEntree{{ $loop->iteration }}" title="Voir les détails">
+                          <i class="fas fa-eye"></i>
                         </a>
 
-                        <a href="#!" data-toggle="modal" data-target="#editEntry{{ $loop->iteration }}" class="btn-sm btn-warning mx-1" title="Editer le produit"><i class="fas fa-edit"></i></a>
+                        <a href="#!" data-toggle="modal" data-target="#editEntry{{ $loop->iteration }}" class="btn btn-sm btn-warning m-2" title="Editer le produit"><i class="fas fa-edit"></i></a>
 
                         <form action="{{ route('produit.delete', ['produit' => $produit->id]) }}" method="POST" style="display: inline;">
                           @csrf
                           @method('DELETE')
-                          <button type="submit" class="btn-sm btn-danger" title="Supprimer le produit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')">
+                          <button type="submit" class="btn btn-sm btn-danger" title="Supprimer le produit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')">
                               <i class="fas fa-trash-alt"></i>
                           </button>
                         </form>

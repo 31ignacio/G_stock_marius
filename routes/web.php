@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\DiversStockExport;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\FactureController;
@@ -10,6 +11,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FactureAchatController;
 use App\Http\Controllers\SocieteController;
+use App\Exports\PoissonnerieStockExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,15 +48,14 @@ Route::prefix('admin')->group(function () {
         Route::get('/detail{client}}', [ClientController::class, 'detail'])->name('client.detail');
         Route::post('/create', [ClientController::class, 'store'])->name('client.store');
         Route::put('/update/{client}', [ClientController::class, 'update'])->name('client.update');    
-        Route::delete('Client/{client}', [ClientController::class, 'delete'])->name('client.delete');
+        Route::delete('delete/{client}', [ClientController::class, 'delete'])->name('client.delete');
     });
     
     Route::prefix('produit')->group(function () {
         Route::get('/', [ProduitController::class, 'index'])->name('produit.index');
-        // Route::get('/produitsGros', [ProduitController::class, 'index2'])->name('produit.index2');
         Route::post('/create', [ProduitController::class, 'store'])->name('produit.store');
-        Route::put('/produit/{produit}/update', [ProduitController::class, 'update'])->name('produit.update');
-        Route::delete('/{produit}', [ProduitController::class, 'delete'])->name('produit.delete');
+        Route::put('/update/{produit}', [ProduitController::class, 'update'])->name('produit.update');
+        Route::delete('delete/{produit}', [ProduitController::class, 'delete'])->name('produit.delete');
     });
 
 
@@ -61,22 +63,17 @@ Route::prefix('admin')->group(function () {
         Route::get('/', [SocieteController::class, 'index'])->name('societe.index');
         Route::post('/create', [SocieteController::class, 'store'])->name('societe.store');
         Route::put('/update/{societe}', [SocieteController::class, 'update'])->name('societe.update');
-        Route::delete('/{societe}', [SocieteController::class, 'delete'])->name('societe.delete');
+        Route::delete('delete/{societe}', [SocieteController::class, 'delete'])->name('societe.delete');
     });
 
-    
     
     Route::prefix('facture')->group(function () {
         Route::get('/', [FactureController::class, 'index'])->name('facture.index');
         Route::get('/create', [FactureController::class, 'create'])->name('facture.create');
-        Route::post('/create', [FactureController::class, 'store'])->name('facture.store');
+        Route::post('store/create', [FactureController::class, 'store'])->name('facture.store');
         Route::get('/details/{code}/{date}',[FactureController::class, 'details'])->name('facture.details');
         Route::get('/annuler',[FactureController::class, 'annuler'])->name('facture.annuler');
-        Route::get('/pointJournée', [FactureController::class, 'point'])->name('facture.point');
-
-        //  Route::get('/pdf/{facture}', [FactureController::class, "pdf"])->name('facture.telecharger');
         Route::get('/facture/telecharger/{code}/{date}', [FactureController::class, 'pdf'])->name('facture.telecharger');
-        Route::get('/{facture}', [FactureController::class, 'delete'])->name('facture.delete');
         Route::get('/recherche/search', [FactureController::class, 'recherche'])->name('facture.search');
         Route::get('/facture/impression/{code}/{date}', [FactureController::class, 'impression'])->name('facture.impression');
         //genere pdf sommation facture
@@ -91,14 +88,14 @@ Route::prefix('admin')->group(function () {
         Route::post('/Achat/store', [FactureAchatController::class, 'store'])->name('factureAchat.store');
         Route::get('/details/{code}/{date}',[FactureAchatController::class, 'details'])->name('factureAchat.details');
         Route::get('/annuler',[FactureAchatController::class, 'annuler'])->name('factureAchat.annuler');
-        Route::get('/pointJournée', [FactureAchatController::class, 'point'])->name('factureAchat.point');    
-        Route::get('/{facture}', [FactureAchatController::class, 'delete'])->name('factureAchat.delete');
         Route::get('/recherche/search', [FactureAchatController::class, 'recherche'])->name('factureAchat.search');
         Route::get('/facture/impression/{code}/{date}', [FactureAchatController::class, 'impression'])->name('factureAchat.impression');
         Route::get('/facture/telecharger/{code}/{date}', [FactureAchatController::class, 'pdf'])->name('factureAchat.telecharger');
-
         Route::get('/download/{facture}', [FactureAchatController::class, 'download'])->name('facture.download');
-
+        // routes/web.php
+        Route::get('/factureAchat/genererPDF', [FactureAchatController::class, 'genererPDF'])->name('factureAchat.genererPDF');
+        Route::get('/factureAchat/genererExcel', [FactureAchatController::class, 'genererExcel'])->name('factureAchat.genererExcel');
+        
     });
     
     
@@ -134,5 +131,15 @@ Route::prefix('admin')->group(function () {
         Route::get('/sortie-stock/poissonnerie/pdf', [StockController::class, 'exportPoissonneriePDF'])->name('sortieDetailPoissonnerie.pdf');
         Route::get('/sortie-stock/poissonnerie/excel', [StockController::class, 'exportSortiePoissonnerieExcel'])->name('sortieDetailPoissonnerie.excel');
 
-    }); 
- });
+        Route::get('/stocks/actuel/poissonnerie/pdf', [StockController::class, 'exportActuelPoissonneriePDF'])->name('stocks.actuel.poissonnerie.pdf');
+        Route::get('/stocks/actuel/poissonnerie/excel', function () {
+            return Excel::download(new PoissonnerieStockExport, 'stocks_actuel_poissonnerie.xlsx');
+            })->name('stocks.actuel.poissonnerie.excel');
+        }); 
+        Route::get('/stocks/actuel/divers/pdf', [StockController::class, 'exportActuelDiversPDF'])->name('stocks.actuel.divers.pdf');
+        
+        Route::get('/stocks/actuel/divers/excel', function () {
+            return Excel::download(new DiversStockExport, 'stocks_actuel_divers.xlsx');
+            })->name('stocks.actuel.divers.excel');
+        });
+ 

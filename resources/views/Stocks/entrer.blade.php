@@ -227,7 +227,7 @@
         </div>
     </div>
     
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha384-o6R3mBSB/q5FvB9RL+DyZD+g3tTPO9P1bxDjCIOtv8yD4QKPIrPCw/tFbk8smJ9Y" crossorigin="anonymous"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha384-o6R3mBSB/q5FvB9RL+DyZD+g3tTPO9P1bxDjCIOtv8yD4QKPIrPCw/tFbk8smJ9Y" crossorigin="anonymous"></script>
     <!-- CSS de Select2 -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <!-- JS de Select2 -->
@@ -251,7 +251,7 @@
               });
           });
       });
-    </script>
+    </script> --}}
 
 
     <script>

@@ -22,7 +22,8 @@ class StockExport implements FromView
     public function view(): View
     {
         $query = Stock::query()
-            ->whereBetween('date', [$this->dateDebut, $this->dateFin]);
+            ->whereBetween('date', [$this->dateDebut, $this->dateFin])
+            ->where('produitType_id', 2);
 
         if ($this->libelle) {
             $query->where('libelle', $this->libelle);

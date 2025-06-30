@@ -67,7 +67,7 @@
                     <div class="row">
                       <div class="col-12">
                         <h5>
-                          <i class="fas fa-globe"></i> <b>Leoni's</b>.
+                          <i class="fas fa-globe"></i> <b>APAL TRADING</b>.
                           <small class="float-right">Date: {{ date('d/m/Y', strtotime($date)) }}
                         </small>
                         </h5>

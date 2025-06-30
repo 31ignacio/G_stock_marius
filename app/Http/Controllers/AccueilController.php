@@ -19,14 +19,13 @@ class AccueilController extends Controller
 
     //pour tout les factures
     $codesFacturesUniquesTout = $facture->unique(function ($factur) {
-        return $factur->code . $factur->date . $factur->totalTTC . $factur->montantPaye . $factur->mode;
+        return $factur->code . $factur->date  . $factur->montantFinal ;
     })->sortByDesc('date');
 
     // Éliminer les doublons de factures
     $codesFacturesUniques = $facture->unique(function ($factur) {
-        return $factur->code . $factur->date . $factur->totalTTC . $factur->montantPaye . $factur->mode . $factur->produitType_id;
+        return $factur->code . $factur->date . $factur->total;
     })->sortByDesc('date');
-
 
     // Filtrer les factures par date d'aujourd'hui
     $facturesAujourdhuiSuper = $codesFacturesUniques->filter(function ($facture) {
@@ -45,7 +44,7 @@ class AccueilController extends Controller
     $sommeMontantPoissonnerie = $facturesAujourdhuiPoissonnerie->sum('total');
 
     // Puis tu calcules la somme du champ "montantFinal" ainsi :
-    $totalMontantFinal = $codesFacturesUniques->sum('montantFinal');
+    $totalMontantFinal = $codesFacturesUniquesTout->sum('montantFinal');
 
     return view('Accueil.index', compact(
         'role',

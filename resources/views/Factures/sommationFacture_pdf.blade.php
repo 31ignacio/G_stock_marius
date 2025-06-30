@@ -26,7 +26,7 @@ th {
 </style>
 </head>
 <body>
-<h2>G_STOCK</h2>
+<h2>APAL TRADING</h2>
 <h3>Sommaire des factures du {{ date('d/m/Y', strtotime($dateDebut)) }} au {{ date('d/m/Y', strtotime($dateFin)) }}</h3>
 
 <div>
