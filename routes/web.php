@@ -26,7 +26,6 @@ use Maatwebsite\Excel\Facades\Excel;
 */
 
 
-
 Route::get('/', [AuthController::class, 'login'])->name('login');
 Route::post('/', [AuthController::class, 'handleLogin'])->name('handleLogin');
 
@@ -89,9 +88,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/details/{code}/{date}',[FactureAchatController::class, 'details'])->name('factureAchat.details');
         Route::get('/annuler',[FactureAchatController::class, 'annuler'])->name('factureAchat.annuler');
         Route::get('/recherche/search', [FactureAchatController::class, 'recherche'])->name('factureAchat.search');
-        Route::get('/facture/impression/{code}/{date}', [FactureAchatController::class, 'impression'])->name('factureAchat.impression');
         Route::get('/facture/telecharger/{code}/{date}', [FactureAchatController::class, 'pdf'])->name('factureAchat.telecharger');
-        Route::get('/download/{facture}', [FactureAchatController::class, 'download'])->name('facture.download');
         // routes/web.php
         Route::get('/factureAchat/genererPDF', [FactureAchatController::class, 'genererPDF'])->name('factureAchat.genererPDF');
         Route::get('/factureAchat/genererExcel', [FactureAchatController::class, 'genererExcel'])->name('factureAchat.genererExcel');
@@ -106,18 +103,26 @@ Route::prefix('admin')->group(function () {
         Route::get('/sortie', [StockController::class, 'sortie'])->name('stock.sortie');
         Route::get('stock/actuel', [StockController::class, 'actuel'])->name('stock.actuel');
         Route::get('stock/actuelPoissonerie', [StockController::class, 'actuelPoissonerie'])->name('stock.actuelPoissonerie');
+
+
         Route::post('/create', [StockController::class, 'store'])->name('stock.store');
         Route::post('/create/Poissonnerie', [StockController::class, 'storePoissonnerie'])->name('stock.storePoissonnerie');
+        Route::get('/index', [StockController::class, 'index'])->name('stock.index');
+        
+        Route::get('/index/attente', [StockController::class, 'listeStockAttente'])->name('stockAttente.index');
+        Route::post('/create/attente', [StockController::class, 'storeAttente'])->name('stockAttente.store');
+        Route::post('/create/attente/Poissonnerie', [StockController::class, 'storeAttentePoissonnerie'])->name('stockAttente.storePoissonnerie');
+        Route::post('/stock/attente/valider/{id}', [StockController::class, 'valider'])->name('stockAttente.valider');
+        Route::delete('delete/{stock}', [StockController::class, 'delete'])->name('stock.delete');
+
+
         Route::get('/inventaires/details', [StockController::class, 'indexinventaire'])->name('inventaires.index');
         Route::get('/inventaires/poissonnerie', [StockController::class, 'indexinventairePoissonnerie'])->name('inventaires.indexPoissonnerie');
-
         Route::get('/recherche/detail', [StockController::class, 'rechercheDetail'])->name('stock.rechercheDetail');
         Route::get('/recherche/poissonnerie', [StockController::class, 'recherchePoissonnerie'])->name('stock.recherchePoissonnerie');
         Route::post('/stock/{id}', [StockController::class, 'update'])->name('stock.update');
         Route::post('/stock/poissonnerie/{id}', [StockController::class, 'updatePoissonnerie'])->name('stock.updatePoissonnerie');
-
         Route::get('sortie/recherche/search', [StockController::class, 'recherche'])->name('sortieDetail.search');
-        
         Route::get('/sortie/poissonnerie', [StockController::class, 'sortiePoissonnerie'])->name('stock.sortiePoissonnerie');
         Route::get('sortie/recherche/poissonnerie', [StockController::class, 'recherchePoisson'])->name('sortiePoissonnerie.search');
         /**DIVERS */

@@ -28,8 +28,8 @@
                                 
                                     
                                 <div class="col-md-4 col-lg-4 col-sm-4 mt-4">
-                                    <button type="submit" class="btn btn-md btn-success" >
-                                      <i class="fa fa-search"></i> Recherche
+                                    <button type="submit" class="btn btn-md btn-outline-success rounded-pill" title="Rechercher....." >
+                                      <i class="fa fa-search"></i>
                                     </button>
                                 </div>
                             </div>
@@ -57,7 +57,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <h5>
-                                        <i class="fas fa-globe"></i> <b>APAL TRADING</b>.
+                                        <i class="fas fa-globe"></i> <b>APL TRADING</b>.
                                         <small class="float-right">Date: {{ date('d/m/Y', strtotime($date)) }}
                                         </small>
                                     </h5>
@@ -113,13 +113,13 @@
                                             <td>
 
                                                 <a href="{{ route('facture.details', ['code' => $factureUnique->code, 'date' => $factureUnique->date]) }}"
-                                                    class="btn btn-sm btn-outline-primary m-2"><i class="fas fa-eye"></i> Détails
+                                                    class="btn btn-sm btn-outline-primary rounded-pill m-2" title="Voir les détails"><i class="fas fa-eye"></i>
                                                 </a>
 
                                                 @if (auth()->user()->role_id == 1 || auth()->user()->role_id == 3)
-                                                    <a href="#" class="btn btn-sm btn-outline-danger m-2" data-toggle="modal"
+                                                    <a href="#" class="btn btn-sm btn-outline-danger rounded-pill m-2" title="Annuler la facture" data-toggle="modal"
                                                         data-target="#confirmationModal"
-                                                        onclick="updateModal('{{ $factureUnique->code }}')"><i class="fas fa-times-circle me-1"></i> Annuler
+                                                        onclick="updateModal('{{ $factureUnique->code }}')"><i class="fas fa-times-circle me-1"></i>
                                                     </a>
                                                 @endif
                                                 

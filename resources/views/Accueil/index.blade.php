@@ -144,14 +144,14 @@
                                 <td><strong>{{ $facture->user->name }}</strong></td>
                                 <td>
                                     <a href="{{ route('facture.details', ['code' => $facture->code, 'date' => $facture->date]) }}"
-                                        class="btn btn-outline-primary btn-sm">
-                                        <i class="fas fa-eye"></i> Détails
+                                        class="btn btn-outline-primary rounded-pill btn-sm" title="Voir les détails">
+                                        <i class="fas fa-eye"></i>
                                     </a>
                                     @if (auth()->user()->role_id == 1 || auth()->user()->role_id == 3)
-                                        <a href="#" class="btn btn-outline-danger btn-sm m-2" data-toggle="modal"
-                                            data-target="#confirmationModal"
+                                        <a href="#" class="btn btn-outline-danger rounded-pill btn-sm m-2" data-toggle="modal"
+                                            data-target="#confirmationModal" title="Annuler la facture"
                                             onclick="updateModal('{{ $facture->code }}')">
-                                            <i class="fas fa-times-circle"></i> Annuler
+                                            <i class="fas fa-times-circle"></i>
                                         </a>
                                     @endif
                                 </td>

@@ -119,10 +119,10 @@
     <div id="container">
         <div id="header">
             <div id="logo">
-                <div class="logo-text">APAL TRADING</div>
+                <div class="logo-text">APL TRADING</div>
             </div>
             <div id="reference">
-                <h3>Facture de vente</h3>
+                <h3>Notes de frais</h3>
                 <p>Date facturation : {{ date('d/m/Y', strtotime($date)) }}</p>
                 @php $infosAffichees = false; @endphp
                 @foreach ($factures as $facture)
@@ -180,7 +180,7 @@
         <div id="summary">
             <div id="note">
                 <h4>Note</h4>
-                <p>Merci pour votre achat ! À bientôt chez APAL TRADING.</p>
+                <p>Merci pour votre achat ! À bientôt.</p>
             </div>
             <div id="total">
                 @php $facture = $factures->first(); @endphp
@@ -230,7 +230,7 @@
 
     <!-- FOOTER -->
     <div id="footer">
-        <p>Merci pour votre achat ! À bientôt chez APAL TRADING.</p>
+        <p>Merci pour votre achat ! À bientôt.</p>
         <hr>
         <p>IFU : 0201810341704 | RCCM : N° RB/COT/18-A-38736 | Tél : +229 0101010101 / 0102020202 - DJADJO</p>
         <div class="page-number"></div>

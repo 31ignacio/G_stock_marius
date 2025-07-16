@@ -31,7 +31,6 @@
                 </thead>
                 <tbody>
                   @forelse ($produits as $produit)
-
                     <tr>
                       <td>{{ $loop->iteration }}</td>
                       <td>{{ $produit->code }}</td>
@@ -45,16 +44,16 @@
                       </td>
                       <td> {{ $produit->prix }}</td>
                       <td>
-                        <a class="btn btn-sm btn-primary m-2" href="#" data-toggle="modal" data-target="#showEntree{{ $loop->iteration }}" title="Voir les détails">
+                        <a class="btn btn-sm btn-outline-primary rounded-pill m-2" href="#" data-toggle="modal" data-target="#showEntree{{ $loop->iteration }}" title="Voir les détails">
                           <i class="fas fa-eye"></i>
                         </a>
 
-                        <a href="#!" data-toggle="modal" data-target="#editEntry{{ $loop->iteration }}" class="btn btn-sm btn-warning m-2" title="Editer le produit"><i class="fas fa-edit"></i></a>
+                        <a href="#!" data-toggle="modal" data-target="#editEntry{{ $loop->iteration }}" class="btn btn-sm btn-outline-warning rounded-pill m-2" title="Editer le produit"><i class="fas fa-edit"></i></a>
 
                         <form action="{{ route('produit.delete', ['produit' => $produit->id]) }}" method="POST" style="display: inline;">
                           @csrf
                           @method('DELETE')
-                          <button type="submit" class="btn btn-sm btn-danger" title="Supprimer le produit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')">
+                          <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill" title="Supprimer le produit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')">
                               <i class="fas fa-trash-alt"></i>
                           </button>
                         </form>
@@ -108,8 +107,8 @@
                 </div>
 
                 <div class="form-row">
-                  
-                  <div class="form-group col-md-6">
+                  {{-- Quantité --}}
+                  {{-- <div class="form-group col-md-6">
                     <label for="quantite"><i class="fas fa-sort-numeric-up"></i> Quantité</label>
                     <input 
                     type="number" 
@@ -121,10 +120,10 @@
                     min="0" 
                     required>
 
-                  </div>
+                  </div> --}}
 
                   <!-- Prix de Vente -->
-                  <div class="form-group col-md-6">
+                  {{-- <div class="form-group col-md-6">
                     <label for="prix"><i class="fas fa-dollar-sign"></i> Prix de Vente</label>
                     <input 
                       type="number" 
@@ -135,7 +134,7 @@
                       step="0.01" 
                       min="0" 
                       required>
-                  </div>
+                  </div> --}}
                 </div>
 
                 <!-- Type de Produit -->
@@ -214,7 +213,7 @@
 
                   <div class="form-row">
                     <!-- Prix de Vente -->
-                    <div class="form-group col-md-6">
+                    {{-- <div class="form-group col-md-6">
                       <label for="prix{{ $loop->iteration }}">
                         <i class="fas fa-dollar-sign"></i> Prix de Vente
                       </label>
@@ -227,7 +226,7 @@
                         step="0.01" 
                         min="0" 
                         required>
-                    </div>
+                    </div> --}}
 
                     <!-- Type de Produit -->
                     <div class="form-group col-md-6">

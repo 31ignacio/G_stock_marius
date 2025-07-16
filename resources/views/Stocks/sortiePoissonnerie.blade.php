@@ -57,8 +57,8 @@
                                     </div>
                             
                                     <div class="col-md-2 col-lg-2 col-sm-6 mb-3 mt-4">
-                                        <button type="submit" class="btn btn-success">
-                                            <i class="fa fa-search"></i> Rechercher
+                                        <button type="submit" class="btn btn-outline-success rounded-pill" title="Rechercher.....">
+                                            <i class="fa fa-search"></i>
                                         </button>
                                     </div>
                                 </div>

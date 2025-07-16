@@ -24,9 +24,9 @@ class ProduitController extends Controller
     {
         $validated = $request->validate([
             'libelle' => 'required|string|max:255',
-            'prix' => 'required|numeric|min:0',
+            // 'prix' => 'required|numeric|min:0',
             'produitType' => 'required|exists:produit_types,id',
-            'quantite' => 'required|numeric|min:0',
+            // 'quantite' => 'required|numeric|min:0',
             'dateReception' => 'nullable|date',
         ]);
 
@@ -49,9 +49,9 @@ class ProduitController extends Controller
         $productData = [
             'code' => $code,
             'libelle' => $request->libelle,
-            'prix' => $request->prix,
+            'prix' => 0,
             'produitType_id' => $request->produitType,
-            'quantite' => $request->quantite,
+            'quantite' => 0,
             'dateReception' => $request->dateReception,
         ];
     
@@ -84,7 +84,7 @@ class ProduitController extends Controller
 
             $produit->update([
                 'libelle' => $request->libelle,
-                'prix' => $request->prix,
+                'prix' => 0,
                 'produitType_id' => $request->produitType,
                 'dateExpiration' => $request->dateExpiration,
                 'dateReception' => $request->dateReception,

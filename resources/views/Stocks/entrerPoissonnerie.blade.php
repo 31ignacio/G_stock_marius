@@ -9,10 +9,8 @@
                     <div class="row">
                         <div class="col-md-2 mt-3">
 
-                                @if (auth()->user()->role_id == 1 || auth()->user()->role_id == 3)
-                                    <a href="#" class="btn btn-outline-primary" title="Faire une entrée de stock" data-toggle="modal"
-                                        data-target="#stockEntryModal"><i class="fas fa-arrow-circle-down"></i> Entrées de stock</a><br><br>
-                                @endif
+                            <a href="#" class="btn btn-outline-primary" title="Faire une entrée de stock" data-toggle="modal"
+                                data-target="#stockEntryModal"><i class="fas fa-arrow-circle-down"></i> Entrées de stock</a><br><br>
                         </div>
                         <div class="col-md-6"></div>
                         <div class="col-md-2">
@@ -57,8 +55,8 @@
                                         </select>
                                     </div>
                                     <div class="col-md-2 col-lg-2 col-sm-6 mb-3 mt-4">
-                                        <button type="submit" class="btn btn-success">
-                                            <i class="fa fa-search"></i> Rechercher
+                                        <button type="submit" class="btn btn-outline-success rounded-pill" title="Rechercher.....">
+                                            <i class="fa fa-search"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -89,9 +87,9 @@
                                     </td>
                                         @if (auth()->user()->role_id == 1 || auth()->user()->role_id == 3)
                                             <td>
-                                                <button class="btn btn-sm btn-outline-danger" data-toggle="modal"
+                                                <button class="btn btn-sm btn-outline-danger rounded-pill m-2" data-toggle="modal"
                                                     data-target="#editModal{{ $stock->id }}" title="Annuler cette entrée"><i
-                                                        class="fas fa-trash-alt"></i> Annuler</button>
+                                                        class="fas fa-trash-alt"></i></button>
                                             </td>
                                         @endif
                                     </tr>
@@ -99,7 +97,7 @@
                                     <!-- Modal -->
                                     <div class="modal fade" id="editModal{{ $stock->id }}" tabindex="-1"
                                     role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="editModalLabel">Supprimer le stock</h5>
@@ -147,7 +145,7 @@
                                     </tr>
                                 @endforelse
                             </tbody>
-                          </table>
+                        </table>
                     </div>
 
                          <br>
@@ -180,8 +178,8 @@
 
 
       <!-- Modal pour les entrées de stock -->
-      <div class="modal fade" id="stockEntryModal" tabindex="-1" aria-labelledby="stockEntryModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="stockEntryModal" tabindex="-1" aria-labelledby="stockEntryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <!-- En-tête du modal -->
                 <div class="modal-header">
@@ -190,29 +188,27 @@
     
                 <!-- Corps du modal -->
                 <div class="modal-body">
-                    <form method="POST" action="{{ route('stock.storePoissonnerie') }}">
+                    <form method="POST" action="{{ route('stockAttente.storePoissonnerie') }}">
                         @csrf
     
-                                               <!-- Produit avec Select2 -->
-                                               <div class="col-12 mb-3">
-                                                <label for="produit" class="form-label">Produit</label>
-                                                <select class="form-control select2" id="produit" name="produit" required>
-                                                    <option value="">Sélectionnez un produit</option>
-                                                    @foreach ($produits as $produit)
-                                                        <option value="{{ $produit->libelle }}" data-prix="{{ $produit->prix }}">{{ $produit->libelle }}</option>
-                                                    @endforeach
-                                                </select>
-                                                @error('produit')
-                                                    <div class="text-danger">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-
-    
-                        <!-- Prix (en lecture seule) -->
+                        <!-- Produit avec Select2 -->
                         <div class="col-12 mb-3">
+                            <label for="produit" class="form-label">Produit</label>
+                            <select class="form-control select2" id="produit" name="produit" required>
+                                <option value="">Sélectionnez un produit</option>
+                                @foreach ($produits as $produit)
+                                    <option value="{{ $produit->libelle }}" data-prix="{{ $produit->prix }}">{{ $produit->libelle }}</option>
+                                @endforeach
+                            </select>
+                            @error('produit')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <!-- Prix (en lecture seule) -->
+                        {{-- <div class="col-12 mb-3">
                             <label for="prix" class="form-label">Prix</label>
                             <input type="text" class="form-control" name="prix" id="prix">
-                        </div>
+                        </div> --}}
 
                         <!-- Quantité -->
                         <div class="col-12 mb-3">

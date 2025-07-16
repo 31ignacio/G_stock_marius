@@ -40,8 +40,8 @@
                                 </div>
                         
                                 <div class="col-md-2 col-lg-2 col-sm-6 mb-3 mt-4">
-                                    <button type="submit" class="btn btn-success">
-                                        <i class="fa fa-search"></i> Rechercher
+                                    <button type="submit" class="btn btn-outline-success rounded-pill" title="Rechercher.....">
+                                        <i class="fa fa-search"></i>
                                     </button>
                                 </div>
                             </div>
@@ -70,7 +70,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <h5>
-                                        <i class="fas fa-globe"></i> <b>APAL TRADING</b>.
+                                        <i class="fas fa-globe"></i> <b>APL TRADING</b>.
                                         <small class="float-right">Date: {{ date('d/m/Y', strtotime($date)) }}
                                         </small>
                                     </h5>

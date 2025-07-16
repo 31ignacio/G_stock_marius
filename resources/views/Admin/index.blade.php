@@ -22,7 +22,7 @@
                 <div class="card bg-light d-flex flex-fill">
                   
                   <div class="card-header text-muted border-bottom-0 position-relative">
-                    <h2 class="text-center">APAL TRADING</h2>
+                    <h2 class="text-center">APL TRADING</h2>
                     
                       <form action="{{ route('admin.toggleStatus', ['admin' => $admin->id]) }}" method="POST" class="position-absolute" style="top: 10px; right: 10px;">
                         @csrf
@@ -71,18 +71,18 @@
                         <form action="{{ route('admin.delete', ['admin' => $admin->id]) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn-sm btn-danger m-1" title="Supprimer l'utilisateur" 
+                            <button type="submit" class="btn-sm btn-outline-danger rounded-pill m-2" title="Supprimer l'utilisateur" 
                                 onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')" 
                                 {{ $admin->estActif ? 'disabled' : '' }} style="{{ $admin->estActif ? 'pointer-events: none; opacity: 0.5;' : '' }}">
                                 
-                                <i class="fas fa-trash-alt"></i> Supprimer
+                                <i class="fas fa-trash-alt"></i>
                             </button>
                         </form>
                         
                         <a href="#!" data-toggle="modal" data-target="#editEntry{{ $admin->id }}" 
-                            class="btn-sm btn-warning {{ $admin->estActif ? 'disabled' : '' }}" 
+                            class="btn btn-sm btn-outline-warning rounded-pill m-2 {{ $admin->estActif ? 'disabled' : '' }}" 
                             title="Modifier l'utilisateur" style="{{ $admin->estActif ? 'pointer-events: none; opacity: 0.5;' : '' }}">
-                            <i class="fas fa-edit"></i> Modifier
+                            <i class="fas fa-edit"></i>
                         </a>
 
                           <!-- Modal -->

@@ -7,6 +7,7 @@ use App\Models\FactureAchat;
 use App\Models\grosProduit;
 use App\Models\ProduitType;
 use App\Models\Societe;
+use App\Models\Stock;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use DateTime;
@@ -51,65 +52,93 @@ class FactureAchatController extends Controller
         return view('Factures.FactureAchats.create', compact('societes','produitTypes','produits'));
     }
 
-
     /**
      * Enregistrer la facture d'achat
     */
     public function store(Request $request)
-    { 
-        if (Auth::check()) {
-            $donnees = json_decode($request->input('donnees'));
-            $societe_id = $request->societe;
-            $dateString = $request->date;
-            $totalAchat = $request->totalAchat;
-            $totalVente = $request->totalVente;
-            $totalBenefice = $request->totalBenefice;
-            $produitType = $request->produitType;
-
-            // Récupérer le dernier numéro de facture enregistré
-            $dernierNumero = DB::table('facture_achats')->max('id'); 
-            // Si aucune facture, on commence à 1, sinon on incrémente
-            $nouveauNumero = $dernierNumero ? $dernierNumero + 1 : 1;
-            $code = str_pad($nouveauNumero, 6, '0', STR_PAD_LEFT); // Format avec des zéros (ex: Facture_000001)
-            $date = new DateTime($dateString);
-
-           try {
-    foreach ($donnees as $donnee) {
-        // Création de la facture
-        $facture = new FactureAchat();
-        $facture->societe_id = $societe_id;
-        $facture->date = $date;
-        $facture->totalAchat = $totalAchat;
-        $facture->totalVente = $totalVente;
-        $facture->totalBenefice = $totalBenefice;
-        $facture->quantite = $donnee->quantite;
-        $facture->benefice = $donnee->benefice;
-        $facture->produit = $donnee->produit;
-        $facture->prix = $donnee->prixAchat;
-        $facture->prixVente = $donnee->prixVente;
-        $facture->total = $donnee->total;
-        $facture->code = $code;
-        $facture->produitType_id = $produitType;
-        $facture->user_id = Auth::user()->id;
-        $facture->save();
-
-        // ✅ Mise à jour du prix dans la table gros_produits
-        grosProduit::where('libelle', $donnee->produit)
-            ->update(['prix' => $donnee->prixVente, 'prixAchat' => $donnee->prixAchat]);
-
-    }
-
-    return response()->json(['message' => 'Facture d\'achat enregistrée avec succès'], 200);
-} catch (Exception $e) {
-    return response()->json(['error_message' => 'Une erreur est survenue lors de l\'enregistrement.'], 500);
-}
-
-                            
-        } else {
+    {
+        if (!Auth::check()) {
             return redirect()->route('login')->with('success_message', 'Veuillez vous connecter pour accéder à cette page.');
         }
-    }
 
+        $donnees = json_decode($request->input('donnees'));
+        $societe_id = $request->societe;
+        $dateString = $request->date;
+        $totalAchat = $request->totalAchat;
+        $totalVente = $request->totalVente;
+        $totalBenefice = $request->totalBenefice;
+        $produitType = $request->produitType;
+        $user_id = Auth::id();
+        $date = new DateTime($dateString);
+
+        // Générer un code facture unique
+        $dernierNumero = DB::table('facture_achats')->max('id');
+        $code = str_pad($dernierNumero ? $dernierNumero + 1 : 1, 6, '0', STR_PAD_LEFT);
+
+        try {
+            foreach ($donnees as $donnee) {
+                // Créer la facture
+                $facture = new FactureAchat();
+                $facture->fill([
+                    'societe_id' => $societe_id,
+                    'date' => $date,
+                    'totalAchat' => $totalAchat,
+                    'totalVente' => $totalVente,
+                    'totalBenefice' => $totalBenefice,
+                    'quantite' => $donnee->quantite,
+                    'benefice' => $donnee->benefice,
+                    'produit' => $donnee->produit,
+                    'prix' => $donnee->prixAchat,
+                    'prixVente' => $donnee->prixVente,
+                    'total' => $donnee->total,
+                    'code' => $code,
+                    'produitType_id' => $produitType,
+                    'user_id' => $user_id
+                ]);
+                $facture->save();
+
+                // Chercher le produit selon le type donné, sinon essayer l’autre type
+                $produit = grosProduit::where('libelle', $donnee->produit)
+                    ->where('produitType_id', $produitType)
+                    ->first();
+
+                if (!$produit) {
+                    $autreType = $produitType == 1 ? 2 : 1;
+                    $produit = grosProduit::where('libelle', $donnee->produit)
+                        ->where('produitType_id', $autreType)
+                        ->first();
+                } else {
+                    $autreType = $produitType; // Si produit trouvé du 1er coup, on garde le type d’origine
+                }
+
+                // Si le produit existe
+                if ($produit) {
+                    // Enregistrer dans le stock
+                    $stock = new Stock();
+                    $stock->fill([
+                        'libelle' => $donnee->produit,
+                        'quantite' => $donnee->quantite,
+                        'date' => $date,
+                        'produitType_id' => $autreType,
+                        'user_id' => $user_id
+                    ]);
+                    $stock->save();
+
+                    // Mise à jour du produit (quantité + prix)
+                    $produit->update([
+                        'quantite' => $produit->quantite + $donnee->quantite,
+                        'prix' => $donnee->prixVente,
+                        'prixAchat' => $donnee->prixAchat,
+                    ]);
+                }
+            }
+
+            return response()->json(['message' => "Facture d'achat enregistrée avec succès"], 200);
+        } catch (\Exception $e) {
+            // Loguer ou afficher l’erreur si besoin
+            return response()->json(['error_message' => "Une erreur est survenue lors de l'enregistrement."], 500);
+        }
+    }
 
     /**
      * Afficher les details d'une facture

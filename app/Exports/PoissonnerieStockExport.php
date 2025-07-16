@@ -26,6 +26,6 @@ class PoissonnerieStockExport implements FromView
         }
                 $date = now()->format('d/m/Y');
 
-        return view('stocks.actuel_poissonnerie_excel', compact('produits','date'));
+        return view('Stocks.actuel_poissonnerie_excel', compact('produits','date'));
     }
 }
