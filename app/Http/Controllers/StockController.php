@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Facture;
 use App\Models\grosProduit;
 use App\Models\Stock;
+use App\Models\StockAttente;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -12,10 +13,10 @@ use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\StockExport;
 use App\Exports\StockPoissonnerieExport;;
-
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\SortieStockExport;
 use App\Exports\SortieStockPoissonnerieExport;
+use Exception;
 
 class StockController extends Controller
 {
@@ -35,7 +36,6 @@ class StockController extends Controller
         $stocks = Stock::where('produitType_id', 2)
         ->orderBy('date', 'desc')
         ->paginate(10);
-
         $produits = grosProduit::where('produitType_id', 2)->get();
 
         return view('Stocks.entrer', compact('stocks','produits'));
@@ -233,7 +233,6 @@ class StockController extends Controller
         ->get();
 
         $produits = grosProduit::where('produitType_id', 2)->get();
-
        
         return view('Stocks.sortie', compact('factures','produits'));
     }
@@ -269,7 +268,6 @@ class StockController extends Controller
 
         $date = Carbon::now();
         $produits = grosProduit::where('produitType_id', 2)->get();
-
 
         return view('Stocks.recherche', compact('factures', 'dateDebut', 'dateFin', 'date','produits'));
     }
@@ -351,7 +349,6 @@ class StockController extends Controller
        
         return view('Stocks.sortiePoissonnerie', compact('factures','produits'));
     }
-
     
     /**
      * Rechercher sortie de stock poissonnerie
@@ -447,8 +444,6 @@ class StockController extends Controller
         return Excel::download($export, 'Sortie-stock-poissonnerie-' . now()->format('d-m-Y') . '.xlsx');
     }
 
-
-
     /**
      * Actuel stock detail divers
      */
@@ -472,7 +467,6 @@ class StockController extends Controller
         return view('Stocks.actuel', compact('produits'));
     }
 
-
     /**
      * PDF du stock actuel divers
      */
@@ -494,8 +488,8 @@ class StockController extends Controller
 
         $date = now()->format('d/m/Y');
 
-        $pdf = Pdf::loadView('stocks.actuel_divers_pdf', compact('produits','date'));
-        return $pdf->download('stocks_actuel_divers_' . now()->format('Ymd_His') . '.pdf');
+        $pdf = Pdf::loadView('Stocks.actuel_divers_pdf', compact('produits','date'));
+        return $pdf->download('Stocks_actuel_divers_' . now()->format('Ymd_His') . '.pdf');
     }
 
     /**
@@ -543,10 +537,9 @@ class StockController extends Controller
 
         $date = now()->format('d/m/Y');
 
-        $pdf = Pdf::loadView('stocks.actuel_poissonnerie_pdf', compact('produits','date'));
-        return $pdf->download('stocks_actuel_poissonnerie_' . now()->format('Ymd_His') . '.pdf');
+        $pdf = Pdf::loadView('Stocks.actuel_poissonnerie_pdf', compact('produits','date'));
+        return $pdf->download('Stocks_actuel_poissonnerie_' . now()->format('Ymd_His') . '.pdf');
     }
-
 
     /**
      * inventair detail divers
@@ -582,7 +575,6 @@ class StockController extends Controller
         return view('Inventaires.index', compact('produits','today'));
     }
 
-
     /**
      * inventair poissonnerie
      */
@@ -616,17 +608,96 @@ class StockController extends Controller
         }
         return view('Inventaires.indexPoissonnerie', compact('produits','today'));
     }
+    /**
+     * enregistrer stock en attente
+     */
+     public function storeAttente(Request $request)
+    {
+        $user = Auth::user()->id;
+        $stock= new stockAttente();
+        // Obtenir la date du jour
+        $dateDuJour = Carbon::now();
+
+        $stock->libelle = $request->produit;        
+        $stock->quantite = $request->quantite;
+        $stock->date = $dateDuJour;
+        $stock->produitType_id = 2;
+        $stock->user_id = $user;
+        $stock->save();
+
+        return redirect()->route('stockAttente.index')->with('success_message', 'Stock entrés avec succès.');
+    }
+
+    /**
+     * enregistrer stock en attente poissonnerie
+     */
+     public function storeAttentePoissonnerie(Request $request)
+    {
+        $user = Auth::user()->id;
+        $stock= new stockAttente();
+        // Obtenir la date du jour
+        $dateDuJour = Carbon::now();
+        $stock->libelle = $request->produit;        
+        $stock->quantite = $request->quantite;
+        $stock->date = $dateDuJour;
+        $stock->produitType_id = 1;
+        $stock->user_id = $user;
+        $stock->save();
+
+        return redirect()->route('stockAttente.index')->with('success_message', 'Stock entrés avec succès.');
+    }
+
+    /**
+     * Liste des stock en attente de validation
+     */
+    public function listeStockAttente(Request $request)
+    {
+        $stocks= stockAttente::all();
+
+        return view('Stocks.attenteListe', compact('stocks'));
+    }
+
+    public function valider($id)
+    {
+        // Récupérer l'entrée stock en attente
+        $stockAttente = stockAttente::findOrFail($id);
+
+        //dd($stockAttente);
+
+        // Créer un nouveau stock avec les infos récupérées
+        $stock = new Stock();
+        $stock->libelle = $stockAttente->libelle;
+        $stock->quantite = $stockAttente->quantite;
+        $stock->date = $stockAttente->date ?? now(); // fallback à aujourd'hui si null
+        $stock->produitType_id = $stockAttente->produitType_id;
+        $stock->user_id = auth()->id(); // utilisateur qui valide
+        $stock->save();
+
+        $produit = grosProduit::where('libelle', $stockAttente->libelle)
+        ->where('produitType_id', $stockAttente->produitType_id)
+        ->first();     
+
+        // Mettez à jour la quantité du produit
+        $nouvelleQuantite = $produit->quantite + $stockAttente->quantite;
+        $produit->update(['quantite' => $nouvelleQuantite, 'prix'=>$produit->prix]);
+        $produit->update(['prix'=>$produit->prix]);
+
+        // Supprimer l'entrée de la table stockAttente
+        $stockAttente->delete();
+
+        // Redirection avec message de succès
+        return redirect()->route('stockAttente.index')->with('success_message', 'Stock validé avec succès et déplacé.');
+    }
 
     /**
      * Enregistrer une entrées de stock divers
      */
-     public function store(Request $request)
+    public function store(Request $request)
     {
         $user = Auth::user()->id;
         $stock = new Stock();
         // Obtenir la date du jour
         $dateDuJour = Carbon::now();
-
         // Récupérer les données JSON envoyées depuis le formulaire
         $stock->libelle = $request->produit;        
         $stock->quantite = $request->quantite;
@@ -635,15 +706,6 @@ class StockController extends Controller
         $stock->user_id = $user;
 
         $stock->save();
-
-        $produit = grosProduit::where('libelle', $request->produit)
-        ->where('produitType_id', 2)
-        ->first();      
-
-        // Mettez à jour la quantité du produit
-        $nouvelleQuantite = $produit->quantite + $request->quantite;
-        $produit->update(['quantite' => $nouvelleQuantite, 'prix'=>$request->prix]);
-        $produit->update(['prix'=>$request->prix]);
 
         return redirect()->route('stock.entrer')->with('success_message', 'Stock entrés avec succès.');
     }
@@ -656,10 +718,8 @@ class StockController extends Controller
      
         $stock = new Stock();
         $user = Auth::user()->id;
-
         // Obtenir la date du jour
         $dateDuJour = Carbon::now();
-
         // Récupérer les données JSON envoyées depuis le formulaire
         $stock->libelle = $request->produit;
         
@@ -670,75 +730,131 @@ class StockController extends Controller
 
         $stock->save();
 
-        $produit = grosProduit::where('libelle', $request->produit)
-        ->where('produitType_id', 1)
-        ->first();
+        // $produit = grosProduit::where('libelle', $request->produit)
+        // ->where('produitType_id', 1)
+        // ->first();
 
-        // Mettez à jour la quantité du produit
-        $nouvelleQuantite = $produit->quantite + $request->quantite;
-        $produit->update(['quantite' => $nouvelleQuantite, 'prix'=>$request->prix]);
-        $produit->update(['prix'=>$request->prix]);
+        // // Mettez à jour la quantité du produit
+        // $nouvelleQuantite = $produit->quantite + $request->quantite;
+        // $produit->update(['quantite' => $nouvelleQuantite, 'prix'=>$request->prix]);
+        // $produit->update(['prix'=>$request->prix]);
 
 
         return redirect()->route('stock.entrerPoissonerie')->with('success_message', 'Stock entrés avec succès.');
     }
 
-
-     public function update(Request $request, $id)
+    /**
+     * Annuler entrer de stock divers
+     */
+    public function update(Request $request, $id)
     {
         // Valider les données du formulaire
         $request->validate([
             'libelle' => 'required',
-            'quantite' => 'required|numeric',
+            'quantite' => 'required|numeric|min:0',
         ]);
-        $stock = Stock::find($id);
+
+        // Récupérer l'ancien stock
+        $stock = Stock::findOrFail($id);
+        $ancienStock = $stock->quantite;
+
+        // Récupérer le produit et son total de sorties
+        $produit = grosProduit::leftJoin('factures', 'gros_produits.libelle', '=', 'factures.produit')
+            ->select(
+                'gros_produits.id',
+                'gros_produits.libelle',
+                'gros_produits.quantite',
+                DB::raw('COALESCE(SUM(factures.quantite), 0) as total_sortie')
+            )
+            ->where('gros_produits.libelle', $request->libelle)
+            ->where('gros_produits.produitType_id', 2)
+            ->groupBy('gros_produits.id', 'gros_produits.libelle', 'gros_produits.quantite') // obligatoire avec MySQL
+            ->first();
+
+
+        if (!$produit) {
+            return back()->with('error_message', 'Produit introuvable.');
+        }
+
+        // Calcul du stock actuel
+        $stock_actuel = $produit->quantite - $produit->total_sortie;
+
+        // Vérifier si le stock permet la suppression
+        if ($stock_actuel < $ancienStock) {
+            return back()->with('error_message', 'Impossible de supprimer ce stock car la quantité actuelle du produit est insuffisante.');
+        }
+
+        // Mise à jour du produit
+        $nouvelleQuantite = $produit->quantite - $ancienStock;
+        grosProduit::where('id', $produit->id)->update(['quantite' => $nouvelleQuantite]);
+
+        // Suppression du stock
         $stock->delete();
 
-        $ancienStock= $stock->quantite;
-        
-        $stock->libelle = $request->libelle;
-        $stock->quantite = $request->quantite;
-
-        $produit = grosProduit::where('libelle', $request->libelle)
-        ->where('produitType_id', 2)
-        ->first();
-
-        $nouvelleQuantite = ($produit->quantite - $ancienStock );
-        $produit->update(['quantite' => $nouvelleQuantite]);
-        
-        // Mettez à jour la quantité du produit
-       
-        return redirect()->route('stock.entrer')->with('success_message', 'Stock supprimé avec succès.');
-
+        return redirect()->route('stock.entrer')
+            ->with('success_message', 'Stock supprimé avec succès.');
     }
-    
+
+    /**
+     * Annuler entrer de stock poissonnerie
+     */
     public function updatePoissonnerie(Request $request, $id)
     {
         // Valider les données du formulaire
         $request->validate([
             'libelle' => 'required',
-            'quantite' => 'required|numeric',
+            'quantite' => 'required|numeric|min:0',
         ]);
-        $stock = Stock::find($id);
+
+        // Récupérer l'ancien stock
+        $stock = Stock::findOrFail($id);
+        $ancienStock = $stock->quantite;
+
+        // Récupérer le produit et son total de sorties
+        $produit = grosProduit::leftJoin('factures', 'gros_produits.libelle', '=', 'factures.produit')
+            ->select(
+                'gros_produits.id',
+                'gros_produits.libelle',
+                'gros_produits.quantite',
+                DB::raw('COALESCE(SUM(factures.quantite), 0) as total_sortie')
+            )
+            ->where('gros_produits.libelle', $request->libelle)
+            ->where('gros_produits.produitType_id', 1)
+            ->groupBy('gros_produits.id', 'gros_produits.libelle', 'gros_produits.quantite') // obligatoire avec MySQL
+            ->first();
+
+        if (!$produit) {
+            return back()->with('error_message', 'Produit introuvable.');
+        }
+
+        // Calcul du stock actuel
+        $stock_actuel = $produit->quantite - $produit->total_sortie;
+
+        // Vérifier si le stock permet la suppression
+        if ($stock_actuel < $ancienStock) {
+            return back()->with('error_message', 'Impossible de supprimer ce stock car la quantité actuelle du produit est insuffisante.');
+        }
+
+        // Mise à jour du produit
+        $nouvelleQuantite = $produit->quantite - $ancienStock;
+        grosProduit::where('id', $produit->id)->update(['quantite' => $nouvelleQuantite]);
+        // Suppression du stock
         $stock->delete();
 
-        $ancienStock= $stock->quantite;
-        
-        $stock->libelle = $request->libelle;
-        $stock->quantite = $request->quantite;
-
-        $produit = grosProduit::where('libelle', $request->libelle)
-        ->where('produitType_id', 1)
-        ->first();
-
-        $nouvelleQuantite = ($produit->quantite - $ancienStock );
-        $produit->update(['quantite' => $nouvelleQuantite]);
-        
-        // Mettez à jour la quantité du produit
-       
         return redirect()->route('stock.entrerPoissonerie')->with('success_message', 'Stock supprimé avec succès.');
-
     }
-    
-    
+
+    /**
+     * Supprimer stock en attente
+     */
+    public function delete(stockAttente $stock)
+    {
+        try {
+            $stock->delete();
+            return back()->with('success_message', 'Stock supprimé avec succès');
+        } catch (Exception $e) {
+            return back()->with('error_message', 'Une erreur est survenue. Veuillez réessayer.');
+        }
+    }
+
 }

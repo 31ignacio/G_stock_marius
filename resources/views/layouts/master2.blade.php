@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
 
-    <title>APAL TRADING</title>
+    <title>APL TRADING</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -56,26 +56,48 @@
     
     <div class="wrapper">
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-            <!-- Left navbar links -->
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
-                            class="fas fa-bars"></i></a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{route('logout')}}" class="nav-link">Me Déconnecter
-                        <span class="right badge badge-danger">off</span>
-                    </a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link"></a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link"></a>
-                </li>
-            </ul>
-        </nav>
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light py-1">
+    <ul class="navbar-nav w-100 d-flex flex-wrap align-items-center">
+        <li class="nav-item mr-2">
+            <a class="nav-link p-1 text-sm" data-widget="pushmenu" href="#" role="button">
+                <i class="fas fa-bars"></i>
+            </a>
+        </li>
+        <li class="nav-item mr-3">
+            <a href="{{ route('logout') }}" class="nav-link p-1 text-sm">
+                Me Déconnecter <span class="badge badge-danger">off</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('stockAttente.index') }}" class="nav-link p-1 text-sm">
+                Stocks en attente <span class="badge badge-success">A valider</span>
+            </a>
+        </li>
+
+        <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="far fa-bell"></i>
+          <span class="badge badge-warning navbar-badge">0</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <span class="dropdown-item dropdown-header">0 Notifications</span>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item">
+            <i class="fas fa-envelope mr-2"></i> 4 new messages
+            <span class="float-right text-muted text-sm">3 mins</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          
+        </div>
+      </li>
+
+      
+    </ul>
+
+     
+</nav>
+
+
         
         <!-- /.navbar -->
 
@@ -84,7 +106,7 @@
             <!-- Brand Logo -->
             <a href="#" class="brand-link">
                 
-                <h4 class="text-center font-weight-light">APAL TRADING</h4>
+                <h4 class="text-center font-weight-light">APL TRADING</h4>
             </a>
 
             <!-- Sidebar -->
@@ -224,9 +246,9 @@
                                     </p>
                                 </a>
                             </li>
+                            
 
-                        @if(auth()->user()->role_id == 1)
-                       
+                        @if(auth()->user()->role_id == 1)              
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
                                     <i class="fas fa-list"></i>
@@ -255,12 +277,7 @@
 
                                 </ul>
                             </li>
-                        @endif
-
                         
-
-                        @if(auth()->user()->role_id == 1)
-                       
                                 {{-- Confirguration --}}
                             <li class="nav-item">
                                 <a href="#" class="nav-link">

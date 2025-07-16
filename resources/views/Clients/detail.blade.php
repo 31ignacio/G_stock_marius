@@ -62,7 +62,7 @@
                                             <td><b>{{ $client->montantPaye - $client->montantFinal}}</b></td>
                                             <td><b>{{ $client->user->name}}</b></td>
                                             <td>
-                                                <a href="{{ route('facture.details', ['code' => $client->code, 'date' => $client->date]) }}" class="btn btn-outline-primary"><i class="fas fa-eye"></i> Détails</a>
+                                                <a href="{{ route('facture.details', ['code' => $client->code, 'date' => $client->date]) }}" class="btn btn-sm btn-outline-primary rounded-pill" title="Voir la facture"><i class="fas fa-eye"></i></a>
                                             </td>
                                         </tr>
                                     @empty

@@ -27,7 +27,9 @@
                   <th>#</th>
                   <th>Raison sociale</th>
                   <th>Nom</th>
+                  @if(auth()->user()->role_id == 1 || auth()->user()->role_id == 3)
                   <th>Téléphone</th>
+                  @endif
                   <th>Ville</th>
                   <th>Actions</th>
 
@@ -40,19 +42,19 @@
                   <td>{{ $loop->iteration }}</td>
                   <td>{{ $client->raisonSociale }} </td>
                   <td>{{ $client->nom }}</td>
+                  @if(auth()->user()->role_id == 1 || auth()->user()->role_id == 3)
                   <td>{{ $client->telephone }}</td>
+                  @endif
                   <td>{{ $client->ville }}</td>
 
                   <td>
-                    <a href="{{ route('client.detail', ['client' => $client->id]) }}" class="btn btn-sm btn-primary" title="Voir les détails du client"><i class="fas fa-eye"></i></a>
-                    <a href="#!" data-toggle="modal" data-target="#editEntry{{ $loop->iteration }}" class="btn btn-sm btn-warning m-2" title="Modifier le client"><i class="fas fa-edit"></i></a>
-
+                    <a href="{{ route('client.detail', ['client' => $client->id]) }}" class="btn btn-sm btn-outline-primary rounded-pill" title="Voir les détails du client"><i class="fas fa-eye"></i></a>
                     @if(auth()->user()->role_id == 1 || auth()->user()->role_id == 3)
-                   
+                    <a href="#!" data-toggle="modal" data-target="#editEntry{{ $loop->iteration }}" class="btn btn-sm btn-outline-warning rounded-pill m-2" title="Modifier le client"><i class="fas fa-edit"></i></a>                   
                       <form action="{{ route('client.delete', ['client' => $client->id]) }}" method="POST" style="display: inline;">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-sm btn-danger" title="Supprimer le client" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce client ?')">
+                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill" title="Supprimer le client" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce client ?')">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                       </form>                 

@@ -26,6 +26,6 @@ class DiversStockExport implements FromView
         }
                 $date = now()->format('d/m/Y');
 
-        return view('stocks.actuel_divers_excel', compact('produits','date'));
+        return view('Stocks.actuel_divers_excel', compact('produits','date'));
     }
 }

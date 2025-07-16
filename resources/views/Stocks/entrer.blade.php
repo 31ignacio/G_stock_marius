@@ -1,18 +1,14 @@
 @extends('layouts.master2')
-
 @section('content')
     <section class="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-
                     <div class="row">
                         <div class="col-md-2 mt-3">
                             <!-- Utilisez une colonne de taille moyenne pour aligner les boutons à gauche -->
-                                @if (auth()->user()->role_id == 1 || auth()->user()->role_id == 3)
-                                    <a href="#" class="btn btn-outline-primary" title="Faire une entrée de stock" data-toggle="modal"
-                                        data-target="#stockEntryModal"><i class="fas fa-arrow-circle-down"></i> Entrées de stock</a><br><br>
-                                @endif
+                                <a href="#" class="btn btn-outline-primary" title="Faire une entrée de stock" data-toggle="modal"
+                                    data-target="#stockEntryModal"><i class="fas fa-arrow-circle-down"></i> Entrées de stock</a><br><br>
                         </div>
                         <div class="col-md-6"></div>
                         <div class="col-md-2">
@@ -57,8 +53,8 @@
                                         </select>
                                     </div>
                                     <div class="col-md-2 col-lg-2 col-sm-6 mb-3 mt-4">
-                                        <button type="submit" class="btn btn-success">
-                                            <i class="fa fa-search"></i> Rechercher
+                                        <button type="submit" class="btn btn-outline-success rounded-pill" title="Rechercher.....">
+                                            <i class="fa fa-search"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -89,9 +85,9 @@
                                             
                                                 @if (auth()->user()->role_id == 1 || auth()->user()->role_id == 3)
                                                     <td>
-                                                        <button class="btn btn-sm btn-outline-danger" data-toggle="modal"
+                                                        <button class="btn btn-sm btn-outline-danger rounded-pill m-2" data-toggle="modal"
                                                             data-target="#editModal{{ $stock->id }}" title="Annuler cette entrée"><i
-                                                                class="fas fa-trash-alt"></i> Annuler</button>
+                                                                class="fas fa-trash-alt"></i></button>
                                                     </td>
                                                 @endif
                                         </tr>
@@ -99,10 +95,10 @@
                                         <!-- Modal pour supprimer entrée-->
                                         <div class="modal fade" id="editModal{{ $stock->id }}" tabindex="-1"
                                             role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                    <h5 class="modal-title" id="editModalLabel">Supprimer le stock</h5>
+                                                    <h5 class="modal-title" id="editModalLabel">Supprimerdddd le stock</h5>
                                                     <button type="button" class="close" data-dismiss="modal"
                                                         aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
@@ -175,18 +171,15 @@
             
         </style>
 
-
-
       <!-- Modal pour les entrées de stock -->
     <div class="modal fade" id="stockEntryModal" tabindex="-1" aria-labelledby="stockEntryModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="stockEntryModalLabel">Entrée de stock</h5>
                 </div>
-    
                 <div class="modal-body">
-                    <form method="POST" action="{{ route('stock.store') }}">
+                    <form method="POST" action="{{ route('stockAttente.store') }}">
                         @csrf
     
                         <!-- Produit avec Select2 -->
@@ -197,15 +190,14 @@
                                 @foreach ($produits as $produit)
                                     <option value="{{ $produit->libelle }}" data-prix="{{ $produit->prix }}">{{ $produit->libelle }}</option>
                                 @endforeach
-                            </select>
-                            
+                            </select>                            
                         </div>
-    
+
                         <!-- Prix (en lecture seule) -->
-                        <div class="col-12 mb-3">
-                            <label for="prix" class="form-label">Prix</label>
+                        {{-- <div class="col-12 mb-3">
+                            <label for="prix" class="form-label">Prix de vente</label>
                             <input type="text" class="form-control" name="prix" id="prix">
-                        </div>
+                        </div> --}}
     
                         <!-- Quantité -->
                         <div class="col-12 mb-3">
@@ -227,33 +219,6 @@
         </div>
     </div>
     
-    {{-- <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha384-o6R3mBSB/q5FvB9RL+DyZD+g3tTPO9P1bxDjCIOtv8yD4QKPIrPCw/tFbk8smJ9Y" crossorigin="anonymous"></script>
-    <!-- CSS de Select2 -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <!-- JS de Select2 -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <!-- jQuery (nécessaire pour Select2) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-
-    <script>
-      $(document).ready(function () {
-          // Initialisation standard de Select2
-          $('.select2').select2({
-              placeholder: "Sélectionnez une option",
-              allowClear: true,
-          });
-
-          // Réinitialiser Select2 lors de l'ouverture du modal
-          $('#stockEntryModal').on('shown.bs.modal', function () {
-              $('.select2').select2({
-                  dropdownParent: $('#stockEntryModal'), // Permet de s'assurer que le menu apparaît dans le modal
-              });
-          });
-      });
-    </script> --}}
-
-
     <script>
         $(document).ready(function() {
         // Initialisation de Select2
@@ -275,7 +240,4 @@
         });
         });
     </script>
-
-  
-
 @endsection

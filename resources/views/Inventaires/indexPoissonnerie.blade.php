@@ -26,7 +26,7 @@
                     <div class="card-body">
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <i class="fas fa-globe mx-2"></i> <b>APAL TRADING</b><br>
+                                <i class="fas fa-globe mx-2"></i> <b>APL TRADING</b><br>
                                 <small><b>IFU :</b> 01234567891011</small><br>
                                 <small><b>Téléphone :</b> (229) 0196472907 / 0161233719</small>
                             </div>

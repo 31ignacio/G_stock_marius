@@ -16,7 +16,7 @@
                     <input type="text" class="form-control" placeholder="Entrez la société" style="border-radius: 10px;" id="categorie" name="societe" required>
                 </div>
             
-                <button type="submit" class="btn btn-sm btn-primary" style="margin-top:8px;"><i class="fas fa-plus-circle"></i>Ajouter</button>   
+                <button type="submit" class="btn btn-sm btn-outline-primary" style="margin-top:8px;"><i class="fas fa-plus-circle"></i>Ajouter</button>   
     
             </form>
         </div>
@@ -41,11 +41,11 @@
                                 <td>{{$societe->societe}}</td>
                             
                                 <td> 
-                                    <a href="#!" data-toggle="modal" data-target="#editEntry{{ $loop->iteration }}" class="btn-sm btn-warning m-2" title="Editer la société"><i class="fas fa-edit"></i></a>
+                                    <a href="#!" data-toggle="modal" data-target="#editEntry{{ $loop->iteration }}" class="btn btn-sm btn-outline-warning rounded-pill m-2" title="Editer la société"><i class="fas fa-edit"></i></a>
                                     <form action="{{ route('societe.delete', $societe->id) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn-sm btn-danger m-2" title="Supprimer la société" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette société ?')">
+                                        <button type="submit" class="btn-sm btn-outline-danger rounded-pill m-2" title="Supprimer la société" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette société ?')">
                                             <i class="fas fa-trash-alt"></i> 
                                         </button>
                                     </form>
