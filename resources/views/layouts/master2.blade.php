@@ -106,7 +106,7 @@
             <!-- Brand Logo -->
             <a href="#" class="brand-link">
                 
-                <h4 class="text-center font-weight-light">APL TRADING</h4>
+                <h4 class="text-center font-weight-light"><i> APL TRADING </i></h4>
             </a>
 
             <!-- Sidebar -->
@@ -114,7 +114,7 @@
                 <!-- Sidebar user (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="../../../../AD/dist/img/avatar.jpeg" class="img-circle elevation-2" alt="User Image">
+                        <img src="../../../../AD/dist/img/logo.png" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
                         {{-- <a href="#" class="d-block">Admin</a> --}}
@@ -343,6 +343,44 @@
     <!-- ./wrapper -->
 
     <!-- jQuery -->
+ <style>
+        .page-loader{
+            position:fixed;
+            inset:0;                     /* top:0; right:0; bottom:0; left:0 */
+            background:rgba(255,255,255,.8);   /* voile blanc semi‐opaque */
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            z-index: 2000;               /* au‑dessus d’AdminLTE/Bootstrap */
+        }
+
+    </style>
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const loader   = document.getElementById('pageLoader');
+    const links    = document.querySelectorAll('.nav-sidebar .nav-link');
+
+    links.forEach(link => {
+        link.addEventListener('click', e => {
+            const href = link.getAttribute('href');
+            /* On évite d’afficher le loader pour les liens qui ouvrent juste
+               un sous‑menu (href="#" ou javascript:void(0))               */
+            if (!href || href === '#' || href.startsWith('javascript')) return;
+
+            /* Affiche le loader */
+            loader.classList.remove('d-none');
+        });
+    });
+
+    /* Option : masque le loader quand la page cible a fini de charger */
+    window.addEventListener('load', () => {
+        loader.classList.add('d-none');
+    });
+});
+</script>
+
+
 
   {{-- Dans votre vue --}}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
@@ -648,6 +686,13 @@
             }
         </style>
     @endif
+
+     <!-- Loader plein écran -->
+    <div id="pageLoader" class="page-loader d-none">
+        <div class="spinner-border text-primary" role="status" style="width:4rem;height:4rem;">
+            <span class="visually-hidden">APL Trading…</span>
+        </div>
+    </div>
 
 </body>
 

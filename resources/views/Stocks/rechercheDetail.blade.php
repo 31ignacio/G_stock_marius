@@ -66,7 +66,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <h5>
-                                            <i class="fas fa-globe"></i> <b>APL TRADING</b>.
+                                            <img src="{{ asset('logop.png') }}" alt="" srcset=""> <b>APL TRADING</b>.
                                             <small class="float-right">Date: {{ date('d/m/Y', strtotime($date)) }}
                                             </small>
                                         </h5>

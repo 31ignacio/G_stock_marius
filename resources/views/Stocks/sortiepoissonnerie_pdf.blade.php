@@ -39,6 +39,7 @@
     </style>
 </head>
 <body>
+    <img src="logop.png" alt="" srcset="">
     <h3 class="title">Sortie de Stock Poissonnerie</h3>
     <p><strong>Période :</strong> {{ \Carbon\Carbon::parse($dateDebut)->format('d/m/Y') }} au {{ \Carbon\Carbon::parse($dateFin)->format('d/m/Y') }}</p>
 

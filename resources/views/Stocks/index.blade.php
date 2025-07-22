@@ -104,4 +104,55 @@
         @endforeach
 
     </div>
+
+     <!-- Loader pleine page -->
+<div id="pageLoader" class="page-loader d-none">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Chargement...</span>
+    </div>
+</div>
+
+<style>
+    .section-title {
+        font-weight: 700;
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid #0d6efd;
+        padding-left: 0.75rem;
+        color: #343a40;
+    }
+    .info-box-icon {
+        font-size: 1.5rem;
+        height: 55px;
+        width: 55px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .page-loader {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(255, 255, 255, 0.7);
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const loader = document.getElementById('pageLoader');
+
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+
+                if (href && href !== '#' && !href.startsWith('javascript')) {
+                    loader.classList.remove('d-none');
+                }
+            });
+        });
+    });
+</script>
 @endsection

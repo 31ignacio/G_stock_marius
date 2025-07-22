@@ -41,9 +41,9 @@
 </head>
 
 <body>
-
+<img src="logop.png" alt="" srcset="">
     <div class="title">
-        📦 <strong>Stocks actuels - Poissonnerie</strong><br>
+         <strong>Stocks actuels - Poissonnerie</strong><br>
         <small>Date : {{ $date }}</small>
     </div>
 

@@ -11,7 +11,7 @@
     </style>
 </head>
 <body>
-    <h2>APL TRADING</h2>
+    <img src="logop.png" alt="" srcset="">
     <p>Date de génération : {{ $date->format('d/m/Y') }}</p>
     <h4>Stock enregistré poissonnerie du {{ \Carbon\Carbon::parse($dateDebut)->format('d/m/Y') }} au {{ \Carbon\Carbon::parse($dateFin)->format('d/m/Y') }}</h4>
 

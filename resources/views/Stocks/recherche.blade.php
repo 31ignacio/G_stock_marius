@@ -68,12 +68,11 @@
                         <div class="row">
                             <div class="col-12">
                                 <h5>
-                                    <i class="fas fa-globe"></i> <b>APL TRADING</b>.
+                                    <img src="{{ asset('logop.png') }}" alt="" srcset=""><b>APL TRADING</b>.
                                     <small class="float-right">Date: {{ date('d/m/Y', strtotime($date)) }}
                                     </small>
                                 </h5>
                             </div>
-                            <!-- /.col -->
                         </div>
                         <h4 class="mt-3"><b> Sortie de stock à la date du
                             {{ date('d/m/Y', strtotime($dateDebut)) }} au

@@ -119,7 +119,10 @@
     <div id="container">
         <div id="header">
             <div id="logo">
-                <div class="logo-text">APL TRADING</div>
+                
+                <div class="logo-text">
+                    <img src="logo.png" alt="" srcset="">
+                </div>
             </div>
             <div id="reference">
                 <h3>Notes de frais</h3>
@@ -133,7 +136,7 @@
                 @endforeach
             </div>
         </div>
-
+        <br><br>
         <!-- CAISSIER & CLIENT SUR LA MÊME LIGNE -->
         <div id="people">
             <div class="person">
@@ -230,9 +233,7 @@
 
     <!-- FOOTER -->
     <div id="footer">
-        <p>Merci pour votre achat ! À bientôt.</p>
-        <hr>
-        <p>IFU : 0201810341704 | RCCM : N° RB/COT/18-A-38736 | Tél : +229 0101010101 / 0102020202 - DJADJO</p>
+        <p>IFU : 3202570607399 |    RCCM : RB/COT/25 B 40622 |     Tél : +229 01 97 93 96 98</p>
         <div class="page-number"></div>
     </div>
 </body>

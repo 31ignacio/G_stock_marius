@@ -91,16 +91,12 @@ class FactureController extends Controller
             ->sortByDesc('date');
 
             $totalTTCType1 = $codesFacturesUniques
-            ->filter(fn($facture) => $facture->produitType_id == 1)
-            ->sum('montantFinal');
-        
-        $totalTTCType3 = $codesFacturesUniques
-            ->filter(fn($facture) => $facture->produitType_id == 2)
+           
             ->sum('montantFinal');
         
             $date = Carbon::now();
         
-        return view('Factures.recherche', compact('factures','totalTTCType1','totalTTCType3','date','codesFacturesUniques', 'dateDebut', 'dateFin'));
+        return view('Factures.recherche', compact('factures','totalTTCType1','date','codesFacturesUniques', 'dateDebut', 'dateFin'));
     }
 
     /**
@@ -312,32 +308,23 @@ class FactureController extends Controller
 
     /**
      * PDF DE LA sommation des factures
-     */
-     public function genererPDF(Request $request)
+    */
+    public function genererPDF(Request $request)
     {
-
         $dateDebut = $request->get('dateDebut');
         $dateFin = $request->get('dateFin');
 
         // Récupération des factures uniques
         $codesFacturesUniques = Facture::with('user')
-            ->whereBetween('date', [$dateDebut, $dateFin])
-            ->select('code','date','client_nom','totalTTC','montantPaye','montantRendu','montantFinal','produitType_id','user_id')
-            ->distinct()
-            ->get();
-
+        ->whereBetween('date', [$dateDebut, $dateFin])
+        ->select('code','date','client_nom','totalTTC','montantPaye','montantRendu','montantFinal','produitType_id','user_id')
+        ->distinct()
+        ->get();
         // Totaux spécifiques
         $totalTTCType1 = Facture::whereBetween('date', [$dateDebut, $dateFin])
-            ->where('produitType_id', 1)
-            ->sum('montantFinal');
-
-        $totalTTCType3 = Facture::whereBetween('date', [$dateDebut, $dateFin])
-            ->where('produitType_id', 2)
-            ->sum('montantFinal');
-
+        ->sum('montantFinal');
         // Génération du PDF
-        $pdf = Pdf::loadView('Factures.sommationFacture_pdf', compact('codesFacturesUniques','dateDebut','dateFin','totalTTCType1','totalTTCType3'));
-
+        $pdf = Pdf::loadView('Factures.sommationFacture_pdf', compact('codesFacturesUniques','dateDebut','dateFin','totalTTCType1'));
         // Retourne le fichier à télécharger
         return $pdf->download('facture_' . $dateDebut . '_au_' . $dateFin . '.pdf');
     }
@@ -354,7 +341,7 @@ class FactureController extends Controller
             ->whereBetween('date', [$dateDebut, $dateFin])
             ->select('code','date','client_nom','totalTTC','montantPaye','montantRendu','montantFinal','produitType_id','user_id')
             ->distinct()
-            ->get();
+        ->get();
 
         return Excel::download(new FactureExport($codesFacturesUniques), 'facture_'.$dateDebut.'_'.$dateFin.'.xlsx');
     }

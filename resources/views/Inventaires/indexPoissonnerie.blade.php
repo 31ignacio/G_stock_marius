@@ -26,9 +26,9 @@
                     <div class="card-body">
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <i class="fas fa-globe mx-2"></i> <b>APL TRADING</b><br>
-                                <small><b>IFU :</b> 01234567891011</small><br>
-                                <small><b>Téléphone :</b> (229) 0196472907 / 0161233719</small>
+                                <img src="{{ asset('logo.png') }}" alt="xxx" srcset=""><br>
+                                <small><b>IFU :</b> 3202570607399</small><br>
+                                <small><b>Tél :</b> (229) 01 97 93 96 98</small>
                             </div>
                             <div class="col-md-6 text-right">
                                 <small><b>Date :</b> {{ date('d/m/Y', strtotime($today)) }}</small>

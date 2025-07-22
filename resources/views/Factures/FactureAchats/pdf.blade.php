@@ -397,9 +397,7 @@
     <div id="footer">
        
         <p style="margin-top: 2%;margin-bottom:2%">
-        
-            IFU : 0201810341704 | RCCM : N° RB/COT/18-A-38736 | Tél : +229 0161105005/ 0194515453 - Djadjo
-        
+            IFU : 3202570607399 |    RCCM : RB/COT/25 B 40622 |     Tél : +229 01 97 93 96 98
         </p>
         <hr>
         <p>
@@ -414,8 +412,7 @@
     <div id="container">
         <div id="header" style="padding-top: 8%">
             <div id="logo">
-                <i class="logo-text">APL TRADING</i>
-                {{-- <img style="pointer-events: none; position: relative; height: 80%; z-index: -1;" src="logo.jpg" alt="Léoni's"> --}}
+                 <img style="pointer-events: none; position: relative; height: 80%; z-index: -1;" src="logo.png" alt="Léoni's"> 
             </div>
             
             <style>
@@ -462,16 +459,14 @@
                 <h3><strong>Notes de frais</strong></h3><br>
                 <p>Date facturation : {{ date('d/m/Y', strtotime($date)) }}</p> <br>
                 @php $infosAffichees = false; @endphp
-                    @foreach ($factures as $facture)
-                        @if ($facture->date == $date && $facture->code == $code && !$infosAffichees)
-                            <address><strong>Référence :</strong> {{ $facture->code }}</address>
-                            @php $infosAffichees = true; @endphp
-                        @endif
-                    @endforeach
-               
+                @foreach ($factures as $facture)
+                    @if ($facture->date == $date && $facture->code == $code && !$infosAffichees)
+                        <address><strong>Référence :</strong> {{ $facture->code }}</address>
+                        @php $infosAffichees = true; @endphp
+                    @endif
+                @endforeach
             </div>
         </div>
-
 
         <div id="fromto">
             <div id="from">

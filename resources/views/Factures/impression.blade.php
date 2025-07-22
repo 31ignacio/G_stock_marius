@@ -83,7 +83,7 @@
 <body>
     <div class="invoice">
         <div class="invoice-header">
-            <h5><b>APL TRADING</b></h5>
+            <img src="{{ asset('logop.png') }}" alt="" srcset="">
             <p>Date: {{ date('d/m/Y', strtotime($date)) }}</p>
         </div>
 
@@ -178,7 +178,7 @@
         <div class="thank-you">
             Merci pour votre achat ! À bientôt.
             <hr>
-              <small> Tél : 0101010101 / 0102020202 </small>
+              <small>IFU: 3202255872789 || RCCM: RB/COT/25 B 40622 || Tél : 01 97 93 96 98 </small>
         </div>
     </div>
        
