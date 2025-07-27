@@ -25,9 +25,7 @@
                                         <th>Quantité</th>
                                         <th>Type</th>
                                         <th>Auteur</th>
-                                        @if (auth()->user()->role_id == 1 || auth()->user()->role_id == 3)
-                                            <th>Actions</th>
-                                        @endif
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -95,9 +93,11 @@
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="submit" class="btn btn-success rounded-pill">
-                                                                <i class="fas fa-check"></i> Confirmer la validation
+                                                            <button type="submit" class="btn btn-success rounded-pill" id="validerBtn{{ $stock->id }}" onclick="showLoader({{ $stock->id }})">
+                                                                <span id="btnText{{ $stock->id }}"><i class="fas fa-check"></i> Confirmer la validation</span>
+                                                                <span id="btnLoader{{ $stock->id }}" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                                                             </button>
+
                                                         </div>
                                                     </form>
 
@@ -114,4 +114,16 @@
         </div>
     </div>
 </section>
+
+<script>
+    function showLoader(id) {
+        const btn = document.getElementById('validerBtn' + id);
+        const text = document.getElementById('btnText' + id);
+        const loader = document.getElementById('btnLoader' + id);
+
+        text.classList.add('d-none');
+        loader.classList.remove('d-none');
+    }
+</script>
+
 @endsection

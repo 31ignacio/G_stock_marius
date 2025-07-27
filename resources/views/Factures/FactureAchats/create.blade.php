@@ -134,9 +134,11 @@
             <!-- Bouton Valider -->
             <div class="row no-print">
                 <div class="col-12 d-flex justify-content-end">
-                    <button type="button" class="btn btn-success" style="width: 180px;" onclick="enregistrerDonnees()">
-                        <i class="fas fa-download"></i> Valider
+                    <button type="button" id="btnValider" class="btn btn-success" style="width: 180px;" onclick="enregistrerDonnees()">
+                        <span id="validerText"><i class="fas fa-download"></i> Valider</span>
+                        <span id="validerLoader" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                     </button>
+
                 </div>
             </div>
 
@@ -255,6 +257,8 @@
             }
 
             $('.btn-success').prop('disabled', true);
+            document.getElementById("validerText").classList.add('d-none');
+            document.getElementById("validerLoader").classList.remove('d-none');
 
             $.ajax({
                 type: "POST",
@@ -304,6 +308,9 @@
                         timer: 60000,
                         timerProgressBar: true
                     });
+                    document.getElementById("validerText").classList.remove('d-none');
+                    document.getElementById("validerLoader").classList.add('d-none');
+
                     $('.btn-success').prop('disabled', false);
                 }
             });

@@ -313,16 +313,16 @@ class FactureController extends Controller
     {
         $dateDebut = $request->get('dateDebut');
         $dateFin = $request->get('dateFin');
-
         // Récupération des factures uniques
-        $codesFacturesUniques = Facture::with('user')
-        ->whereBetween('date', [$dateDebut, $dateFin])
-        ->select('code','date','client_nom','totalTTC','montantPaye','montantRendu','montantFinal','produitType_id','user_id')
-        ->distinct()
-        ->get();
-        // Totaux spécifiques
-        $totalTTCType1 = Facture::whereBetween('date', [$dateDebut, $dateFin])
-        ->sum('montantFinal');
+        $factures = Facture::whereBetween('date', [$dateDebut, $dateFin])->get();
+
+        $codesFacturesUniques = $factures
+        ->unique(function ($facture) {
+            return $facture->code . $facture->date . $facture->client . $facture->totalHT . $facture->emplacement;
+        })
+        ->sortByDesc('date');
+        $totalTTCType1 = $codesFacturesUniques->sum('montantFinal');
+
         // Génération du PDF
         $pdf = Pdf::loadView('Factures.sommationFacture_pdf', compact('codesFacturesUniques','dateDebut','dateFin','totalTTCType1'));
         // Retourne le fichier à télécharger
@@ -337,11 +337,13 @@ class FactureController extends Controller
         $dateDebut = $request->get('dateDebut');
         $dateFin = $request->get('dateFin');
 
-        $codesFacturesUniques = Facture::with('user')
-            ->whereBetween('date', [$dateDebut, $dateFin])
-            ->select('code','date','client_nom','totalTTC','montantPaye','montantRendu','montantFinal','produitType_id','user_id')
-            ->distinct()
-        ->get();
+        $factures = Facture::whereBetween('date', [$dateDebut, $dateFin])->get();
+
+        $codesFacturesUniques = $factures
+        ->unique(function ($facture) {
+            return $facture->code . $facture->date . $facture->client . $facture->totalHT . $facture->emplacement;
+        })
+        ->sortByDesc('date');
 
         return Excel::download(new FactureExport($codesFacturesUniques), 'facture_'.$dateDebut.'_'.$dateFin.'.xlsx');
     }

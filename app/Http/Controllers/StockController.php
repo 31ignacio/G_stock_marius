@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Facture;
 use App\Models\grosProduit;
 use App\Models\Stock;
+use App\Models\User;
 use App\Models\StockAttente;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -17,6 +18,9 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\SortieStockExport;
 use App\Exports\SortieStockPoissonnerieExport;
 use Exception;
+use App\Notifications\StockNotification;
+use App\Notifications\ValiderNotification;
+
 
 class StockController extends Controller
 {
@@ -613,17 +617,20 @@ class StockController extends Controller
      */
      public function storeAttente(Request $request)
     {
-        $user = Auth::user()->id;
         $stock= new stockAttente();
-        // Obtenir la date du jour
-        $dateDuJour = Carbon::now();
-
+    
         $stock->libelle = $request->produit;        
         $stock->quantite = $request->quantite;
-        $stock->date = $dateDuJour;
+        $stock->date = Carbon::now();
         $stock->produitType_id = 2;
-        $stock->user_id = $user;
+        $stock->user_id = Auth::user()->id;
         $stock->save();
+
+        $users = User::whereIN('role_id', [1,3])->get(); // ✅ bon filtrage multiple
+
+        foreach ($users as $user) {
+            $user->notify(new StockNotification($stock));
+        }
 
         return redirect()->route('stockAttente.index')->with('success_message', 'Stock entrés avec succès.');
     }
@@ -633,16 +640,19 @@ class StockController extends Controller
      */
      public function storeAttentePoissonnerie(Request $request)
     {
-        $user = Auth::user()->id;
         $stock= new stockAttente();
-        // Obtenir la date du jour
-        $dateDuJour = Carbon::now();
         $stock->libelle = $request->produit;        
         $stock->quantite = $request->quantite;
-        $stock->date = $dateDuJour;
+        $stock->date = Carbon::now();
         $stock->produitType_id = 1;
-        $stock->user_id = $user;
+        $stock->user_id = Auth::user()->id;
         $stock->save();
+
+        $users = User::whereIN('role_id', [1,3])->get(); // ✅ bon filtrage multiple
+
+        foreach ($users as $user) {
+            $user->notify(new StockNotification($stock));
+        }
 
         return redirect()->route('stockAttente.index')->with('success_message', 'Stock entrés avec succès.');
     }
@@ -661,9 +671,6 @@ class StockController extends Controller
     {
         // Récupérer l'entrée stock en attente
         $stockAttente = stockAttente::findOrFail($id);
-
-        //dd($stockAttente);
-
         // Créer un nouveau stock avec les infos récupérées
         $stock = new Stock();
         $stock->libelle = $stockAttente->libelle;
@@ -685,6 +692,12 @@ class StockController extends Controller
         // Supprimer l'entrée de la table stockAttente
         $stockAttente->delete();
 
+        $users = User::where('role_id', 2)->get(); // on récupère TOUS les utilisateurs avec ce rôle
+
+        foreach ($users as $user) {
+            $user->notify(new ValiderNotification($stock)); // notification à chacun
+        }
+
         // Redirection avec message de succès
         return redirect()->route('stockAttente.index')->with('success_message', 'Stock validé avec succès et déplacé.');
     }
@@ -692,56 +705,36 @@ class StockController extends Controller
     /**
      * Enregistrer une entrées de stock divers
      */
-    public function store(Request $request)
-    {
-        $user = Auth::user()->id;
-        $stock = new Stock();
-        // Obtenir la date du jour
-        $dateDuJour = Carbon::now();
-        // Récupérer les données JSON envoyées depuis le formulaire
-        $stock->libelle = $request->produit;        
-        $stock->quantite = $request->quantite;
-        $stock->date = $dateDuJour;
-        $stock->produitType_id = 2;
-        $stock->user_id = $user;
+    // public function store(Request $request)
+    // {
+    //     $stock = new Stock();
+    //     // Récupérer les données JSON envoyées depuis le formulaire
+    //     $stock->libelle = $request->produit;        
+    //     $stock->quantite = $request->quantite;
+    //     $stock->date = Carbon::now();
+    //     $stock->produitType_id = 2;
+    //     $stock->user_id = Auth::user()->id;
+    //     $stock->save();
 
-        $stock->save();
-
-        return redirect()->route('stock.entrer')->with('success_message', 'Stock entrés avec succès.');
-    }
+    //     return redirect()->route('stock.entrer')->with('success_message', 'Stock entrés avec succès.');
+    // }
 
      /**
      * Enregistrer une entrées de stock poissonnerie
      */
-    public function storePoissonnerie(Request $request)
-    {
-     
-        $stock = new Stock();
-        $user = Auth::user()->id;
-        // Obtenir la date du jour
-        $dateDuJour = Carbon::now();
-        // Récupérer les données JSON envoyées depuis le formulaire
-        $stock->libelle = $request->produit;
-        
-        $stock->quantite = $request->quantite;
-        $stock->date = $dateDuJour;
-        $stock->produitType_id = 1;
-        $stock->user_id = $user;
+    // public function storePoissonnerie(Request $request)
+    // {
+    //     $stock = new Stock();
+    //     // Récupérer les données JSON envoyées depuis le formulaire
+    //     $stock->libelle = $request->produit;
+    //     $stock->quantite = $request->quantite;
+    //     $stock->date = Carbon::now();
+    //     $stock->produitType_id = 1;
+    //     $stock->user_id = Auth::user()->id;
+    //     $stock->save();
 
-        $stock->save();
-
-        // $produit = grosProduit::where('libelle', $request->produit)
-        // ->where('produitType_id', 1)
-        // ->first();
-
-        // // Mettez à jour la quantité du produit
-        // $nouvelleQuantite = $produit->quantite + $request->quantite;
-        // $produit->update(['quantite' => $nouvelleQuantite, 'prix'=>$request->prix]);
-        // $produit->update(['prix'=>$request->prix]);
-
-
-        return redirect()->route('stock.entrerPoissonerie')->with('success_message', 'Stock entrés avec succès.');
-    }
+    //     return redirect()->route('stock.entrerPoissonerie')->with('success_message', 'Stock entrés avec succès.');
+    // }
 
     /**
      * Annuler entrer de stock divers

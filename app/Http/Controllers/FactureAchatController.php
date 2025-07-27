@@ -8,6 +8,8 @@ use App\Models\grosProduit;
 use App\Models\ProduitType;
 use App\Models\Societe;
 use App\Models\Stock;
+use App\Models\User;
+use App\Notifications\AchatNotification;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use DateTime;
@@ -15,10 +17,6 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
-
-
-
 
 class FactureAchatController extends Controller
 {
@@ -131,10 +129,16 @@ class FactureAchatController extends Controller
                         'prixAchat' => $donnee->prixAchat,
                     ]);
                 }
+                $users = User::where('role_id', 2)->get(); // on récupère TOUS les utilisateurs avec ce rôle
+
+                foreach ($users as $user) {
+                    $user->notify(new AchatNotification($facture)); // notification à chacun
+                }
             }
 
             return response()->json(['message' => "Facture d'achat enregistrée avec succès"], 200);
         } catch (\Exception $e) {
+            
             // Loguer ou afficher l’erreur si besoin
             return response()->json(['error_message' => "Une erreur est survenue lors de l'enregistrement."], 500);
         }
@@ -212,7 +216,23 @@ class FactureAchatController extends Controller
     {
         
        $code=$request->factureCode;
-      FactureAchat::where('code', $code)->delete();
+        $factures = FactureAchat::select('produit', 'quantite')->where('code', $code)->get();
+        
+        foreach ($factures as $facture) {
+            //c'est la tu feras le jeu
+            $produit = grosProduit::where('libelle', $facture->produit)->first();
+
+            if ($produit) {
+                $nouvelleQuantite = $produit->quantite  - $facture->quantite; // Mettez à jour la nouvelle quantité
+        
+                // Assurez-vous de mettre à jour le produit avec la nouvelle quantité correcte
+                $produit->quantite = $nouvelleQuantite;
+                $produit->save();
+            }
+        }
+        // Suppression de toutes les factures avec le code spécifié
+        FactureAchat::where('code', $code)->delete();
+
       
         return back()->with('success_message', 'La facture d\'achat a été annulée avec succès.');
     }

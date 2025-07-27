@@ -12,6 +12,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FactureAchatController;
 use App\Http\Controllers\SocieteController;
 use App\Exports\PoissonnerieStockExport;
+use App\Http\Controllers\NotificationController;
 use Maatwebsite\Excel\Facades\Excel;
 
 /*
@@ -105,8 +106,8 @@ Route::prefix('admin')->group(function () {
         Route::get('stock/actuelPoissonerie', [StockController::class, 'actuelPoissonerie'])->name('stock.actuelPoissonerie');
 
 
-        Route::post('/create', [StockController::class, 'store'])->name('stock.store');
-        Route::post('/create/Poissonnerie', [StockController::class, 'storePoissonnerie'])->name('stock.storePoissonnerie');
+        // Route::post('/create', [StockController::class, 'store'])->name('stock.store');
+        // Route::post('/create/Poissonnerie', [StockController::class, 'storePoissonnerie'])->name('stock.storePoissonnerie');
         Route::get('/index', [StockController::class, 'index'])->name('stock.index');
         
         Route::get('/index/attente', [StockController::class, 'listeStockAttente'])->name('stockAttente.index');
@@ -140,11 +141,23 @@ Route::prefix('admin')->group(function () {
         Route::get('/stocks/actuel/poissonnerie/excel', function () {
             return Excel::download(new PoissonnerieStockExport, 'stocks_actuel_poissonnerie.xlsx');
             })->name('stocks.actuel.poissonnerie.excel');
-        }); 
+
         Route::get('/stocks/actuel/divers/pdf', [StockController::class, 'exportActuelDiversPDF'])->name('stocks.actuel.divers.pdf');
         
         Route::get('/stocks/actuel/divers/excel', function () {
             return Excel::download(new DiversStockExport, 'stocks_actuel_divers.xlsx');
-            })->name('stocks.actuel.divers.excel');
-        });
+        })->name('stocks.actuel.divers.excel');
+    });
+
+        Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications');
+        Route::delete('/notifications/{id}', function ($id) {
+        auth()->user()->notifications()->findOrFail($id)->delete();
+        return back();
+        })->name('notifications.delete');
+
+
+
+}); 
+        
+
  

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Facture</title>
+    <title>Facture Vente</title>
     <style>
         @page {
             margin: 30px;
@@ -119,13 +119,12 @@
     <div id="container">
         <div id="header">
             <div id="logo">
-                
                 <div class="logo-text">
                     <img src="logo.png" alt="" srcset="">
                 </div>
             </div>
             <div id="reference">
-                <h3>Notes de frais</h3>
+                <h3>Notes de frais vente</h3>
                 <p>Date facturation : {{ date('d/m/Y', strtotime($date)) }}</p>
                 @php $infosAffichees = false; @endphp
                 @foreach ($factures as $facture)
