@@ -108,7 +108,7 @@
      <!-- Loader pleine page -->
     <div id="pageLoader" class="page-loader d-none">
         <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-            <span class="visually-hidden">APL_TRADING...</span>
+            <span class="visually-hidden"></span>
         </div>
     </div>
 

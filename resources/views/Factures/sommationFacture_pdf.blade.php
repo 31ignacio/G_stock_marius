@@ -44,7 +44,7 @@
             <th>Date</th>
             <th>Total TTC</th>
             <th>Encaissé</th>
-            <th>Reliquat</th>
+            <th>Solde à encaissé</th>
             <th>Montant Final</th>
             {{-- <th>Type</th> --}}
             <th>Caissier</th>

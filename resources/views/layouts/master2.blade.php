@@ -125,12 +125,9 @@
                             <div id="pagination" class="text-center pt-2"></div>
                         </div>
                     </li>
-
-
                 </ul>
             </nav>
             
-
             <!-- Main Sidebar Container -->
             <aside class="main-sidebar sidebar-dark-primary elevation-4">
                 <!-- Brand Logo -->
@@ -406,7 +403,7 @@
         {{-- script pour pagination de notification --}}
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                const itemsPerPage = 5;
+                const itemsPerPage = 3;
                 const items = Array.from(document.querySelectorAll("#notification-list .notification-item"));
                 const paginationContainer = document.getElementById("pagination");
 
@@ -751,7 +748,7 @@
         <!-- Loader plein écran -->
         <div id="pageLoader" class="page-loader d-none">
             <div class="spinner-border text-primary" role="status" style="width:4rem;height:4rem;">
-                <span class="visually-hidden">APL_TRADING…</span>
+                <span class="visually-hidden"></span>
             </div>
         </div>
 

@@ -44,7 +44,7 @@
                                 <th>Total TTC</th>
                                 <th>Encaissé</th>
                                 <th>Montant Final</th>
-                                {{-- <th>Reliquat</th> --}}
+                                {{-- <th>Solde à encaissé</th> --}}
                                 <th>Type</th>
                                 <th>Caissier</th>
                                 <th>Actions</th>

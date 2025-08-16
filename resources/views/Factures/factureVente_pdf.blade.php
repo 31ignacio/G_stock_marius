@@ -124,7 +124,7 @@
                 </div>
             </div>
             <div id="reference">
-                <h3>Notes de frais vente</h3>
+                <h3>Brouillard</h3>
                 <p>Date facturation : {{ date('d/m/Y', strtotime($date)) }}</p>
                 @php $infosAffichees = false; @endphp
                 @foreach ($factures as $facture)
@@ -204,7 +204,7 @@
                         <td>{{ number_format($facture->montantPaye, 2, ',', ' ') }} CFA</td>
                     </tr>
                     <tr>
-                        <th>Reliquat :</th>
+                        <th>Solde à encaissé :</th>
                         <td>
                             @if ($facture->montantPaye > $facture->totalTTC)
                                 {{ number_format(0, 2, ',', ' ') }}
@@ -232,7 +232,7 @@
 
     <!-- FOOTER -->
     <div id="footer">
-        <p>IFU : 3202570607399 |    RCCM : RB/COT/25 B 40622 |     Tél : +229 01 97 93 96 98</p>
+        <p>RCCM : RB/COT/25 B 40622 |     Tél : +229 01 97 93 96 98</p>
         <div class="page-number"></div>
     </div>
 </body>

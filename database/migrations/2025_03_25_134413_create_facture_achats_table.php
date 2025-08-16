@@ -13,27 +13,30 @@ return new class extends Migration
     {
         Schema::create('facture_achats', function (Blueprint $table) {
             $table->id();
-            $table->float('quantite');
+            $table->decimal('quantite', 20, 2);          // Quantité avec précision
             $table->dateTime('date');
-            $table->integer('prix');
-            $table->integer('prixVente');
-            $table->integer('benefice');
-            $table->float('total');
+            $table->decimal('prix', 20, 2);              // Prix d'achat
+            $table->decimal('prixVente', 20, 2);         // Prix de vente
+            $table->decimal('benefice', 20, 2);          // Bénéfice unitaire
+            $table->decimal('total', 20, 2);             // Total de l'achat
             $table->text('code');
-            $table->float('totalAchat');
-            $table->float('totalVente');
-            $table->float('totalBenefice');
+            $table->decimal('totalAchat', 20, 2);        // Total achat
+            $table->decimal('totalVente', 20, 2);        // Total vente
+            $table->decimal('totalBenefice', 20, 2);     // Total bénéfice
             $table->text('produit');
+            
             $table->unsignedBigInteger('societe_id');
             $table->foreign('societe_id')->references('id')->on('societes')->onDelete('cascade');
+            
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            
             $table->unsignedBigInteger('produitType_id');
             $table->foreign('produitType_id')->references('id')->on('produit_types')->onDelete('cascade');
 
-
             $table->timestamps();
         });
+
     }
 
     /**

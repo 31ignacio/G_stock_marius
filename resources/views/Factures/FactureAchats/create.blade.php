@@ -3,14 +3,14 @@
 @section('content')
     <div class="container my-4">
 
-        <!-- Wrapper formulaire avec bordure douce et ombre -->
+        <!-- Wrapper formulaire -->
         <div class="p-4 shadow rounded" style="background-color: #f9faf9; border: 1px solid #d1e7dd;">
             <h4 class="mb-4 text-success">
                 <i class="fas fa-info-circle"></i> Détails de la Transaction
             </h4>
 
             <div class="row g-3 mb-4">
-                <!-- Date de la transaction -->
+                <!-- Date -->
                 <div class="col-md-4">
                     <label for="date" class="form-label text-dark"><i class="fas fa-calendar-alt"></i> Date</label>
                     <input type="date" id="date" class="form-control" onkeydown="return false">
@@ -48,32 +48,38 @@
                         <label for="produit" class="form-label text-dark"><i class="fas fa-cubes"></i> Produits</label>
                         <select id="produit" class="form-control select2">
                             <option value="" selected disabled>-- Choisissez un produit --</option>
-                            <!-- Chargé via JS -->
                         </select>
                     </div>
 
                     <!-- Quantité -->
                     <div class="col-md-2">
-                        <label for="quantite" class="form-label text-dark"><i class="fas fa-sort-numeric-up"></i> Quantité</label>
-                        <input type="number" min="0" step="0.01" value="0" id="quantite" name="quantite" class="form-control">
+                        <label for="quantite" class="form-label text-dark"><i class="fas fa-sort-numeric-up"></i>
+                            Quantité</label>
+                        <input type="number" min="0" step="0.01" value="0" id="quantite" name="quantite"
+                            class="form-control">
                         <div id="messagePro" class="text-danger small mt-1"></div>
                     </div>
 
                     <!-- Prix d'achat -->
                     <div class="col-md-2">
-                        <label for="prix" class="form-label text-dark"><i class="fas fa-tag"></i> Coût de revient</label>
-                        <input type="number" min="0" step="0.01" id="prix" name="prix" class="form-control">
+                        <label for="prix" class="form-label text-dark"><i class="fas fa-tag"></i> Coût de
+                            revient</label>
+                        <input type="number" min="0" step="0.01" id="prix" name="prix"
+                            class="form-control">
                     </div>
 
                     <!-- Prix de vente -->
                     <div class="col-md-2">
-                        <label for="prixVente" class="form-label text-dark"><i class="fas fa-dollar-sign"></i> Prix de vente</label>
-                        <input type="number" min="0" step="0.01" id="prixVente" name="prixVente" class="form-control">
+                        <label for="prixVente" class="form-label text-dark"><i class="fas fa-dollar-sign"></i> Prix de
+                            vente</label>
+                        <input type="number" min="0" step="0.01" id="prixVente" name="prixVente"
+                            class="form-control">
                     </div>
 
-                    <!-- Bouton Ajouter -->
+                    <!-- Bouton Ajouter/Modifier -->
                     <div class="col-md-3 d-grid">
-                        <button type="button" class="btn btn-success mt-1" onclick="ajouterAuTableau()" title="Ajouter">
+                        <button type="button" class="btn btn-success mt-1" id="btnAjouter" onclick="ajouterOuModifier()"
+                            title="Ajouter">
                             <i class="fas fa-plus"></i> Ajouter
                         </button>
                     </div>
@@ -93,16 +99,14 @@
                             <th>Prix de vente</th>
                             <th>Total</th>
                             <th>Bénéfice</th>
-                            <th>Supprimer</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="monTableauBody">
-                        <!-- Lignes ajoutées dynamiquement -->
                     </tbody>
                 </table>
             </div>
 
-            <!-- Totaux -->
             <!-- Totaux -->
             <div class="row justify-content-end mt-4">
                 <div class="col-md-5 col-lg-4">
@@ -125,33 +129,31 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>  
-                    </div>  
+                        </div>
+                    </div>
                 </div>
             </div>
-
 
             <!-- Bouton Valider -->
             <div class="row no-print">
                 <div class="col-12 d-flex justify-content-end">
-                    <button type="button" id="btnValider" class="btn btn-success" style="width: 180px;" onclick="enregistrerDonnees()">
+                    <button type="button" id="btnValider" class="btn btn-success" style="width: 180px;"
+                        onclick="enregistrerDonnees()">
                         <span id="validerText"><i class="fas fa-download"></i> Valider</span>
-                        <span id="validerLoader" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        <span id="validerLoader" class="spinner-border spinner-border-sm d-none" role="status"
+                            aria-hidden="true"></span>
                     </button>
-
                 </div>
             </div>
 
             <div id="msg200" class="mt-3"></div>
         </div>
-
     </div>
 
-    <!-- Scripts -->
-    <script src="../../../../AD/toastify-js-master/src/toastify.js"></script>
-
     <script>
-        function ajouterAuTableau() {
+        let rowEnEdition = null;
+
+        function ajouterOuModifier() {
             let quantite = document.getElementById("quantite").value.trim();
             let produit = document.getElementById("produit").value.trim();
             let societe = document.getElementById("societe").value.trim();
@@ -159,9 +161,7 @@
             let prixVente = document.getElementById("prixVente").value.trim();
 
             if (!quantite || isNaN(parseFloat(quantite)) || !produit || !societe || !prixAchat || !prixVente) {
-                $('#msg25').html(`<p class="text-danger fw-bold">
-                                    Veuillez remplir tous les champs avec des valeurs valides.
-                                </p>`);
+                $('#msg25').html(`<p class="text-danger fw-bold">Veuillez remplir tous les champs.</p>`);
                 setTimeout(() => $('#msg25').html(''), 5000);
                 return;
             }
@@ -173,34 +173,51 @@
             const total = quantite * prixVente;
             const benefice = quantite * (prixVente - prixAchat);
 
-            let tableauBody = document.getElementById("monTableauBody");
-            let newRow = tableauBody.insertRow();
+            if (rowEnEdition) {
+                // Modification
+                rowEnEdition.cells[0].textContent = quantite.toFixed(2);
+                rowEnEdition.cells[1].textContent = produit;
+                rowEnEdition.cells[2].textContent = prixAchat.toFixed(2);
+                rowEnEdition.cells[3].textContent = prixVente.toFixed(2);
+                rowEnEdition.cells[4].textContent = total.toFixed(2);
+                rowEnEdition.cells[5].textContent = benefice.toFixed(2);
+                rowEnEdition = null;
+                document.getElementById("btnAjouter").innerHTML = '<i class="fas fa-plus"></i> Ajouter';
+            } else {
+                // Ajout
+                let tableauBody = document.getElementById("monTableauBody");
+                let newRow = tableauBody.insertRow();
 
-            newRow.insertCell(0).textContent = quantite.toFixed(2);
-            newRow.insertCell(1).textContent = produit;
-            newRow.insertCell(2).textContent = prixAchat.toFixed(2);
-            newRow.insertCell(3).textContent = prixVente.toFixed(2);
-            newRow.insertCell(4).textContent = total.toFixed(2);
-            newRow.insertCell(5).textContent = benefice.toFixed(2);
+                newRow.insertCell(0).textContent = quantite.toFixed(2);
+                newRow.insertCell(1).textContent = produit;
+                newRow.insertCell(2).textContent = prixAchat.toFixed(2);
+                newRow.insertCell(3).textContent = prixVente.toFixed(2);
+                newRow.insertCell(4).textContent = total.toFixed(2);
+                newRow.insertCell(5).textContent = benefice.toFixed(2);
 
-            let actionCell = newRow.insertCell(6);
-            let deleteBtn = document.createElement("button");
-            deleteBtn.className = "btn btn-sm btn-outline-danger rounded-circle";
-            deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
-            deleteBtn.title = "Supprimer";
-            deleteBtn.onclick = function () {
-                tableauBody.removeChild(newRow);
-                mettreAJourTotalHT();
-            };
-            actionCell.appendChild(deleteBtn);
+                let actionCell = newRow.insertCell(6);
+                actionCell.innerHTML = `
+            <button class="btn btn-sm btn-outline-primary me-1" onclick="modifierLigne(this)"><i class="fas fa-edit"></i></button>
+            <button class="btn btn-sm btn-outline-danger" onclick="supprimerLigne(this)"><i class="fas fa-times"></i></button>
+        `;
+            }
 
             mettreAJourTotalHT();
+            document.getElementById("monFormulaire").reset();
+        }
 
-            // Reset form fields
-            document.getElementById("quantite").value = "";
-            document.getElementById("prix").value = "";
-            document.getElementById("prixVente").value = "";
-            document.getElementById("produit").value = "";
+        function modifierLigne(btn) {
+            rowEnEdition = btn.closest("tr");
+            document.getElementById("quantite").value = parseFloat(rowEnEdition.cells[0].textContent);
+            document.getElementById("produit").value = rowEnEdition.cells[1].textContent;
+            document.getElementById("prix").value = parseFloat(rowEnEdition.cells[2].textContent);
+            document.getElementById("prixVente").value = parseFloat(rowEnEdition.cells[3].textContent);
+            document.getElementById("btnAjouter").innerHTML = '<i class="fas fa-save"></i> Enregistrer';
+        }
+
+        function supprimerLigne(btn) {
+            btn.closest("tr").remove();
+            mettreAJourTotalHT();
         }
 
         function mettreAJourTotalHT() {
@@ -212,17 +229,36 @@
                 let quantite = parseFloat(tableauBody.rows[i].cells[0].textContent);
                 let prixAchat = parseFloat(tableauBody.rows[i].cells[2].textContent);
                 let prixVente = parseFloat(tableauBody.rows[i].cells[3].textContent);
-
                 totalAchat += quantite * prixAchat;
                 totalVente += quantite * prixVente;
             }
 
             let totalBenefice = totalVente - totalAchat;
-
             document.getElementById("totalAchat").textContent = totalAchat.toFixed(2) + " CFA";
             document.getElementById("totalVente").textContent = totalVente.toFixed(2) + " CFA";
             document.getElementById("totalBenefice").textContent = totalBenefice.toFixed(2) + " CFA";
         }
+
+        // Mise à jour dynamique produits
+        function updateProduits() {
+            let produitTypeSelect = document.getElementById('produitType');
+            let produitsSelect = document.getElementById('produit');
+            let selectedProduitType = produitTypeSelect.value;
+            produitsSelect.innerHTML = '<option value="" disabled selected>-- Choisissez un produit --</option>';
+
+            @foreach ($produits as $produit)
+                if ("{{ $produit->produitType_id }}" == selectedProduitType) {
+                    let option = document.createElement('option');
+                    option.value = "{{ $produit->libelle }}";
+                    option.setAttribute('data-prix', "{{ $produit->prix }}");
+                    option.textContent = "{{ $produit->libelle }}";
+                    produitsSelect.appendChild(option);
+                }
+            @endforeach
+        }
+        document.getElementById('produitType').addEventListener('change', updateProduits);
+        updateProduits();
+
 
         function enregistrerDonnees() {
             let tableauBody = document.getElementById("monTableauBody");
@@ -232,7 +268,6 @@
             let totalAchat = document.getElementById("totalAchat").textContent;
             let totalVente = document.getElementById("totalVente").textContent;
             let produitType = document.getElementById("produitType").value;
-
             if (!date || !societe || !produitType || tableauBody.rows.length === 0) {
                 Swal.fire({
                     icon: "warning",
@@ -242,7 +277,6 @@
                 });
                 return;
             }
-
             let donnees = [];
             for (let i = 0; i < tableauBody.rows.length; i++) {
                 let ligne = tableauBody.rows[i];
@@ -255,11 +289,9 @@
                     benefice: ligne.cells[5].textContent
                 });
             }
-
             $('.btn-success').prop('disabled', true);
             document.getElementById("validerText").classList.add('d-none');
             document.getElementById("validerLoader").classList.remove('d-none');
-
             $.ajax({
                 type: "POST",
                 url: "{{ route('factureAchat.store') }}",
@@ -273,7 +305,6 @@
                     totalBenefice,
                     produitType
                 },
-
                 success: function(response) {
                     Swal.fire({
                         icon: "success",
@@ -299,7 +330,6 @@
                             console.error("Erreur de parsing JSON:", e);
                         }
                     }
-
                     Swal.fire({
                         icon: "error",
                         title: "Erreur",
@@ -310,54 +340,15 @@
                     });
                     document.getElementById("validerText").classList.remove('d-none');
                     document.getElementById("validerLoader").classList.add('d-none');
-
                     $('.btn-success').prop('disabled', false);
                 }
             });
         }
-
-        // Mise à jour dynamique des produits selon le type sélectionné
-        function updateProduits() {
-            let produitTypeSelect = document.getElementById('produitType');
-            let produitsSelect = document.getElementById('produit');
-            let selectedProduitType = produitTypeSelect.value;
-
-            produitsSelect.innerHTML = '<option value="" disabled selected>-- Choisissez un produit --</option>';
-
-            @foreach ($produits as $produit)
-                if ("{{ $produit->produitType_id }}" == selectedProduitType) {
-                    let option = document.createElement('option');
-                    option.value = "{{ $produit->libelle }}";
-                    option.setAttribute('data-prix', "{{ $produit->prix }}");
-                    option.textContent = "{{ $produit->libelle }}";
-                    produitsSelect.appendChild(option);
-                }
-            @endforeach
-        }
-
-        document.getElementById('produitType').addEventListener('change', updateProduits);
-
-        // Initialisation
-        updateProduits();
-
-        // Date max aujourd'hui
-        (function(){
-            let today = new Date();
-            let yyyy = today.getFullYear();
-            let mm = String(today.getMonth() + 1).padStart(2, '0');
-            let dd = String(today.getDate()).padStart(2, '0');
-            let formatted = `${yyyy}-${mm}-${dd}`;
-            let inputDate = document.getElementById('date');
-            inputDate.value = formatted;
-            inputDate.max = formatted;
-        })();
     </script>
 
-        <!-- CSS pour un style plus propre et uniforme (pour l'entete) -->
-    <style>    
+    <style>
         .select2-container .select2-selection--single {
             height: 38px !important;
         }
     </style>
-
 @endsection

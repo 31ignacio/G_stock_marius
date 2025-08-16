@@ -347,7 +347,7 @@
                         title: "Facture enregistrée !",
                         text: "Votre facture a été enregistrée avec succès.",
                         confirmButtonColor: "#4CAF50",
-                        timer: 5000,
+                        timer: 3000,
                         timerProgressBar: true,
                         didClose: () => {
                             window.location.href = "{{ route('accueil.index') }}";

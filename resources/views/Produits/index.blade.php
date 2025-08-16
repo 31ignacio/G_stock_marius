@@ -3,13 +3,31 @@
 @section('content')
 
 <section class="content">
+  <div id="loader" class="d-none text-center mt-3">
+    <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Chargement...</span>
+    </div>
+    <p class="mt-2">Importation en cours, veuillez patienter...</p>
+</div>
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
 
+           
             <a href="#" type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal-xl">
-              Ajouter Produit
-            </a><br><br><br>
+    Ajouter Produit
+</a>
+
+<!-- Bouton d'import Excel -->
+<form id="importForm" action="{{ route('produit.import') }}" method="POST" enctype="multipart/form-data" style="display: inline;">
+    @csrf
+    <label class="btn btn-outline-success mb-0">
+        <i class="fas fa-file-excel"></i> Importer Excel
+        <input type="file" name="excel_file" accept=".xlsx, .xls" hidden onchange="submitImport()">
+    </label>
+</form>
+
+<br><br><br>
           
           <div class="card">
             <div class="card-header">
@@ -212,8 +230,24 @@
                   </div>
 
                   <div class="form-row">
-                    <!-- Prix de Vente -->
-                    {{-- <div class="form-group col-md-6">
+                    <!-- Prix d'Achat -->
+                    <div class="form-group col-md-6">
+                      <label for="prixAchat{{ $loop->iteration }}">
+                        <i class="fas fa-dollar-sign"></i> Prix d'Achat
+                      </label>
+                      <input 
+                        type="number" 
+                        class="form-control" 
+                        id="prixAchat{{ $loop->iteration }}" 
+                        name="prixAchat" 
+                        value="{{ $produit->prixAchat }}" 
+                        step="0.01" 
+                        min="0" 
+                        required>
+                    </div>
+
+
+                    <div class="form-group col-md-6">
                       <label for="prix{{ $loop->iteration }}">
                         <i class="fas fa-dollar-sign"></i> Prix de Vente
                       </label>
@@ -226,7 +260,13 @@
                         step="0.01" 
                         min="0" 
                         required>
-                    </div> --}}
+                    </div>
+
+                    
+                  </div>
+
+                  <!-- Date de Réception -->
+                  <div class="form-row">
 
                     <!-- Type de Produit -->
                     <div class="form-group col-md-6">
@@ -247,21 +287,21 @@
                           @endforeach
                       </select>
                     </div>
-                  </div>
+                    
+                    <div class="form-group col-md-6">
+                      <label for="dateReception{{ $loop->iteration }}">
+                        <i class="far fa-calendar-alt"></i> Date de Réception
+                      </label>
+                      <input 
+                        type="date" 
+                        class="form-control" 
+                        id="dateReception{{ $loop->iteration }}" 
+                        name="dateReception" 
+                        value="{{ \Carbon\Carbon::parse($produit->dateReception)->format('Y-m-d') }}" 
+                        required 
+                        onkeydown="return false">
+                    </div>
 
-                  <!-- Date de Réception -->
-                  <div class="form-group">
-                    <label for="dateReception{{ $loop->iteration }}">
-                      <i class="far fa-calendar-alt"></i> Date de Réception
-                    </label>
-                    <input 
-                      type="date" 
-                      class="form-control" 
-                      id="dateReception{{ $loop->iteration }}" 
-                      name="dateReception" 
-                      value="{{ \Carbon\Carbon::parse($produit->dateReception)->format('Y-m-d') }}" 
-                      required 
-                      onkeydown="return false">
                   </div>
 
                   <!-- Boutons -->
@@ -280,65 +320,72 @@
 
       {{-- Details d"un produit --}}
     @foreach ($produits as $produit)
-<div class="modal fade" id="showEntree{{ $loop->iteration }}" tabindex="-1" aria-labelledby="showModalLabel{{ $loop->iteration }}" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content shadow">
-      <div class="modal-header bg-dark text-white">
-        <h5 class="modal-title" id="showModalLabel{{ $loop->iteration }}">
-            <i class="fas fa-box"></i> Détails du produit : <b>{{ $produit->libelle }}</b>
-        </h5>
-        <button 
-            type="button" 
-            class="close text-white" 
-            data-dismiss="modal" 
-            aria-label="Fermer">
-            <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
+    <div class="modal fade" id="showEntree{{ $loop->iteration }}" tabindex="-1" aria-labelledby="showModalLabel{{ $loop->iteration }}" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content shadow">
+          <div class="modal-header bg-dark text-white">
+            <h5 class="modal-title" id="showModalLabel{{ $loop->iteration }}">
+                <i class="fas fa-box"></i> Détails du produit : <b>{{ $produit->libelle }}</b>
+            </h5>
+            <button 
+                type="button" 
+                class="close text-white" 
+                data-dismiss="modal" 
+                aria-label="Fermer">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
 
-      <div class="modal-body p-4">
-        <div class="table-responsive">
-          <table class="table table-bordered table-hover">
-            <tbody>
-              <tr>
-                <th><i class="fas fa-barcode"></i> Code</th>
-                <td>{{ $produit->code }}</td>
-              </tr>
-              <tr>
-                <th><i class="fas fa-tag"></i> Produit</th>
-                <td>{{ $produit->libelle }}</td>
-              </tr>
-              <tr>
-                <th><i class="fas fa-boxes"></i> Type de produit</th>
-                <td>{{ $produit->produitType->produitType }}</td>
-              </tr>
-              <tr>
-                <th><i class="fas fa-dollar-sign"></i> Prix de vente</th>
-                <td class="text-danger font-weight-bold">
-                  {{ number_format($produit->prix, 0, ',', ' ') }} CFA
-                </td>
-              </tr>
-              <tr>
-                <th><i class="far fa-calendar-alt"></i> Date de réception</th>
-                <td>{{ date('d/m/Y', strtotime($produit->dateReception)) }}</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="modal-body p-4">
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover">
+                <tbody>
+                  <tr>
+                    <th><i class="fas fa-barcode"></i> Code</th>
+                    <td>{{ $produit->code }}</td>
+                  </tr>
+                  <tr>
+                    <th><i class="fas fa-tag"></i> Produit</th>
+                    <td>{{ $produit->libelle }}</td>
+                  </tr>
+                  <tr>
+                    <th><i class="fas fa-boxes"></i> Type de produit</th>
+                    <td>{{ $produit->produitType->produitType }}</td>
+                  </tr>
+
+                  <tr>
+                    <th><i class="fas fa-dollar-sign"></i> Prix d'Achat</th>
+                    <td class="text-warning font-weight-bold">
+                      {{ number_format($produit->prixAchat, 0, ',', ' ') }} CFA
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><i class="fas fa-dollar-sign"></i> Prix de vente</th>
+                    <td class="text-danger font-weight-bold">
+                      {{ number_format($produit->prix, 0, ',', ' ') }} CFA
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><i class="far fa-calendar-alt"></i> Date de réception</th>
+                    <td>{{ date('d/m/Y', strtotime($produit->dateReception)) }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button 
+                type="button" 
+                class="btn btn-secondary" 
+                data-dismiss="modal">
+                <i class="fas fa-times"></i> Fermer
+            </button>
+          </div>
         </div>
       </div>
-
-      <div class="modal-footer">
-        <button 
-            type="button" 
-            class="btn btn-secondary" 
-            data-dismiss="modal">
-            <i class="fas fa-times"></i> Fermer
-        </button>
-      </div>
     </div>
-  </div>
-</div>
-@endforeach
+    @endforeach
 
 
      {{-- Control sur la date --}}
@@ -357,5 +404,15 @@
         inputDate.value = dateAujourdhui;
         inputDate.max = dateAujourdhui;
     </script>
+
+
+    <script>
+    function submitImport() {
+        document.getElementById('loader').classList.remove('d-none'); // Affiche le loader
+        document.getElementById('importForm').submit();               // Soumet le formulaire
+    }
+</script>
+
+
 
 @endsection

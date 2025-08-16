@@ -56,6 +56,8 @@ Route::prefix('admin')->group(function () {
         Route::post('/create', [ProduitController::class, 'store'])->name('produit.store');
         Route::put('/update/{produit}', [ProduitController::class, 'update'])->name('produit.update');
         Route::delete('delete/{produit}', [ProduitController::class, 'delete'])->name('produit.delete');
+
+        Route::post('/produits/import', [ProduitController::class, 'import'])->name('produit.import');
     });
 
 
@@ -79,7 +81,6 @@ Route::prefix('admin')->group(function () {
         //genere pdf sommation facture
         Route::get('/facture/genererPDF', [FactureController::class, 'genererPDF'])->name('facture.genererPDF');
         Route::get('/facture/genererExcel', [FactureController::class, 'genererExcel'])->name('facture.genererExcel');
-
     });
 
     Route::prefix('factureAchat')->group(function () {

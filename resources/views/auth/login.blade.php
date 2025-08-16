@@ -1,166 +1,177 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LOGIN</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOGIN</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
-    body {
-      background: url('supermarket_bg.jpg') no-repeat center center fixed;
-      background-size: cover;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+        body {
+            background: url('supermarket_bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-    .login-container {
-      background: rgba(255, 255, 255, 0.2);
-      padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(10px);
-      width: 400px;
-      text-align: center;
-    }
+        .login-container {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            width: 400px;
+            text-align: center;
+        }
 
-    .login-container h2 {
-      margin-bottom: 20px;
-      color: #fff;
-    }
+        .login-container h2 {
+            margin-bottom: 20px;
+            color: #fff;
+        }
 
-    .input-group {
-      margin-bottom: 20px;
-      position: relative;
-    }
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
 
-    .input-group input {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      outline: none;
-    }
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+        }
 
-    .input-group input:focus {
-      border: 2px solid #fff;
-    }
+        .input-group input:focus {
+            border: 2px solid #fff;
+        }
 
-    .login-button {
-      width: 100%;
-      padding: 12px;
-      background: #ff9800;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 18px;
-      cursor: pointer;
-      transition: 0.3s;
-      position: relative;
-    }
+        .login-button {
+            width: 100%;
+            padding: 12px;
+            background: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+        }
 
-    .login-button:hover {
-      background: #e68900;
-    }
+        .login-button:hover {
+            background: #e68900;
+        }
 
-    .toggle-password {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-    }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
 
-    .error-message {
-      color: red;
-      font-size: 14px;
-      margin-top: 5px;
-    }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
 
-    .spinner {
-      display: none;
-      border: 3px solid rgba(255, 255, 255, 0.3);
-      border-top: 3px solid white;
-      border-radius: 50%;
-      width: 16px;
-      height: 16px;
-      animation: spin 1s linear infinite;
-      position: absolute;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
+        .spinner {
+            display: none;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
 
-    .loading .spinner {
-      display: inline-block;
-    }
+        .loading .spinner {
+            display: inline-block;
+        }
 
-    .loading .text-label {
-      opacity: 0.5;
-    }
+        .loading .text-label {
+            opacity: 0.5;
+        }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-  </style>
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
+
 <body>
-  <div class="login-container">
-    @if (Session::get('success_message'))
-      <b style="font-size:15px; color:#fff">{{ Session::get('success_message') }}</b>
-    @endif
+    <div class="login-container">
 
-    @if (Session::get('error_message'))
-      <b style="font-size:15px; color:rgb(177, 0, 0)">{{ Session::get('error_message') }}</b>
-    @endif
 
-    <br><br><hr><br>
+        <marquee behavior="scroll" direction="left" scrollamount="6">
+            <h2 style="display: inline;">Bienvenue chez APL TRADING !! 🛒✨</h2>
+        </marquee><br>
+        @if (Session::get('success_message'))
+            <b style="font-size:15px; color:#fff">{{ Session::get('success_message') }}</b>
+        @endif
 
-    <h2>Connexion</h2>
-    <form method="post" action="{{ route('handleLogin') }}" onsubmit="return handleLoginSubmit(this)">
-      @csrf
-      <div class="input-group">
-        <input type="email" name="email" placeholder="Email" required>
-        @error('email')
-        <div class="error-message">{{ $message }}</div>
-        @enderror
-      </div>
+        @if (Session::get('error_message'))
+            <b style="font-size:15px; color:rgb(177, 0, 0)">{{ Session::get('error_message') }}</b>
+        @endif
 
-      <div class="input-group">
-        <input type="password" name="password" id="password" placeholder="Mot de passe" required>
-        <span class="toggle-password" onclick="togglePassword()">👁️</span>
-        @error('password')
-        <div class="error-message">{{ $message }}</div>
-        @enderror
-      </div>
+        <br><br>
+        <hr><br>
 
-      <button type="submit" class="login-button" id="loginBtn">
-        <span class="text-label">Se connecter</span>
-        <div class="spinner" id="spinner"></div>
-      </button>
-    </form>
-  </div>
+        <h2>Connexion</h2>
+        <form method="post" action="{{ route('handleLogin') }}" onsubmit="return handleLoginSubmit(this)">
+            @csrf
+            <div class="input-group">
+                <input type="email" name="email" placeholder="Email" required>
+                @error('email')
+                    <div class="error-message">{{ $message }}</div>
+                @enderror
+            </div>
 
-  <script>
-    function togglePassword() {
-      var passwordInput = document.getElementById('password');
-      passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
-    }
+            <div class="input-group">
+                <input type="password" name="password" id="password" placeholder="Mot de passe" required>
+                <span class="toggle-password" onclick="togglePassword()">👁️</span>
+                @error('password')
+                    <div class="error-message">{{ $message }}</div>
+                @enderror
+            </div>
 
-    function handleLoginSubmit(form) {
-      const btn = document.getElementById('loginBtn');
-      btn.classList.add('loading');
-      btn.disabled = true;
-      return true; // continue submit
-    }
-  </script>
+            <button type="submit" class="login-button" id="loginBtn">
+                <span class="text-label">Se connecter</span>
+                <div class="spinner" id="spinner"></div>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function togglePassword() {
+            var passwordInput = document.getElementById('password');
+            passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+        }
+
+        function handleLoginSubmit(form) {
+            const btn = document.getElementById('loginBtn');
+            btn.classList.add('loading');
+            btn.disabled = true;
+            return true; // continue submit
+        }
+    </script>
 </body>
+
 </html>

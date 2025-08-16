@@ -7,6 +7,8 @@ use App\Models\grosProduit;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ProduitsImport;
 
 class ProduitController extends Controller
 {
@@ -68,6 +70,21 @@ class ProduitController extends Controller
         }
     }
 
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'excel_file' => 'required|file|mimes:xlsx,xls',
+        ], [
+            'excel_file.required' => 'Veuillez sélectionner un fichier.',
+            'excel_file.mimes' => 'Le fichier doit être au format Excel (.xlsx ou .xls).',
+        ]);
+
+        Excel::import(new ProduitsImport, $request->file('excel_file'));
+
+        return redirect()->back();
+    }
+
     
    
     public function update(grosProduit $produit, Request $request){
@@ -84,7 +101,8 @@ class ProduitController extends Controller
 
             $produit->update([
                 'libelle' => $request->libelle,
-                'prix' => 0,
+                'prix' => $request->prix,
+                'prixAchat' => $request->prixAchat,
                 'produitType_id' => $request->produitType,
                 'dateExpiration' => $request->dateExpiration,
                 'dateReception' => $request->dateReception,

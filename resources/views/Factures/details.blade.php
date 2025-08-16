@@ -86,7 +86,7 @@
                                         <td><span class="fw-bold">{{ number_format($facture->montantPaye, 2, ',', ' ') }} CFA</span></td>
                                     </tr>
                                     <tr>
-                                        <th class="text-danger"><i class="fas fa-hand-holding-usd"></i> Reliquat :</th>
+                                        <th class="text-danger"><i class="fas fa-hand-holding-usd"></i> Solde à encaissé :</th>
                                         <td><span class="fw-bold">
                                             @if ($facture->montantPaye > $facture->totalTTC) 
                                                 0,00 CFA 

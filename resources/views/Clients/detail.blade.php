@@ -45,7 +45,7 @@
                                         <th>Date</th>
                                         <th id="montant">Total TTC</th>
                                         <th>Montant Perçu</th>
-                                        <th>Reliquat</th>
+                                        <th>Solde à encaissé</th>
                                         <th>Caissier</th>
                                         <th>Actions</th>
 

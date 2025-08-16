@@ -22,36 +22,31 @@ class AccueilController extends Controller
         return $factur->code . $factur->date  . $factur->montantFinal ;
     })->sortByDesc('date');
 
-    // Éliminer les doublons de factures
-    $codesFacturesUniques = $facture->unique(function ($factur) {
-        return $factur->code . $factur->date . $factur->total;
-    })->sortByDesc('date');
-
-    // Filtrer les factures par date d'aujourd'hui
-    $facturesAujourdhuiSuper = $codesFacturesUniques->filter(function ($facture) {
-        return Carbon::parse($facture->date)->isToday() && $facture->produitType_id == 2;
-    });
-
-    $facturesAujourdhuiPoissonnerie = $codesFacturesUniques->filter(function ($facture) {
-        return Carbon::parse($facture->date)->isToday() && $facture->produitType_id == 1;
-    });
-
+     // Filtrer uniquement les factures du jour
     $facturesAujourdhui = $codesFacturesUniquesTout->filter(function ($facture) {
         return Carbon::parse($facture->date)->isToday();
     });
 
-    $sommeMontant = $facturesAujourdhuiSuper->sum('total');
-    $sommeMontantPoissonnerie = $facturesAujourdhuiPoissonnerie->sum('total');
+
+    // ✅ Ventes Poissonnerie (produitType_id = 1)
+    $sommeMontantPoissonnerie = $facturesAujourdhui->where('produitType_id', 1)->sum('montantFinal');
+
+    // ✅ Ventes Divers (produitType_id = 2)
+    $sommeMontant = $facturesAujourdhui->where('produitType_id', 2)->sum('montantFinal');
+
+    // ✅ Réductions du jour
+    $sommeMontantReduction = $facturesAujourdhui->sum('reduction');
 
     // Puis tu calcules la somme du champ "montantFinal" ainsi :
     $totalMontantFinal = $codesFacturesUniquesTout->sum('montantFinal');
+
 
     return view('Accueil.index', compact(
         'role',
         'nombreClient',
         'sommeMontant',
         'sommeMontantPoissonnerie',
-        'facturesAujourdhui','totalMontantFinal'
+        'facturesAujourdhui','totalMontantFinal','sommeMontantReduction'
     ));
 
 }
