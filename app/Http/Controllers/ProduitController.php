@@ -87,33 +87,63 @@ class ProduitController extends Controller
 
     
    
-    public function update(grosProduit $produit, Request $request){
+    // public function update(grosProduit $produit, Request $request){
 
-        $exists = grosProduit::where('id', '!=', $produit->id)
-            ->where('libelle', $request->libelle)
-            ->exists();
+    //     $exists = grosProduit::where('id', '!=', $produit->id)
+    //         ->where('libelle', $request->libelle)
+    //         ->exists();
 
-        if ($exists) {
-            return back()->with('error_message', 'Un autre produit avec les mêmes informations existe déjà.');
-        }
+    //     if ($exists) {
+    //         return back()->with('error_message', 'Un autre produit avec les mêmes informations existe déjà.');
+    //     }
 
-        try {
+    //     try {
 
-            $produit->update([
-                'libelle' => $request->libelle,
-                'prix' => $request->prix,
-                'prixAchat' => $request->prixAchat,
-                'produitType_id' => $request->produitType,
-                'dateExpiration' => $request->dateExpiration,
-                'dateReception' => $request->dateReception,
-            ]);
+    //         $produit->update([
+    //             'libelle' => $request->libelle,
+    //             'prix' => $request->prix,
+    //             'prixAchat' => $request->prixAchat,
+    //             'produitType_id' => $request->produitType,
+    //             'dateExpiration' => $request->dateExpiration,
+    //             'dateReception' => $request->dateReception,
+    //         ]);
 
-            return redirect()->route('produit.index')->with('success_message', 'Produit modifié avec succès.');
-        } catch (\Exception $e) {
+    //         return redirect()->route('produit.index')->with('success_message', 'Produit modifié avec succès.');
+    //     } catch (\Exception $e) {
            
-            return back()->with('error_message', 'Une erreur est survenue pendant la modification.');
-        }
+    //         return back()->with('error_message', 'Une erreur est survenue pendant la modification.');
+    //     }
+    // }
+
+    public function update(grosProduit $produit, Request $request)
+{
+    // Vérifier si un autre produit a déjà le même libellé
+    $exists = grosProduit::where('id', '!=', $produit->id)
+        ->where('libelle', $request->libelle)
+        ->exists();
+
+    if ($exists) {
+        return back()->with('error_message', 'Un autre produit avec les mêmes informations existe déjà.');
     }
+
+    try {
+        // Mise à jour uniquement des champs autorisés (sans quantité)
+        $produit->update([
+            'libelle' => $request->libelle,
+            'prix' => $request->prix,
+            'prixAchat' => $request->prixAchat,
+            'produitType_id' => $request->produitType,
+            'dateExpiration' => $request->dateExpiration,
+            'dateReception' => $request->dateReception,
+            // 'quantite' => $produit->quantite // <-- on la laisse telle qu’elle est
+        ]);
+
+        return redirect()->route('produit.index')->with('success_message', 'Produit modifié avec succès.');
+    } catch (\Exception $e) {
+        return back()->with('error_message', 'Une erreur est survenue pendant la modification.');
+    }
+}
+
     
     /**
      * Supprimer un produit

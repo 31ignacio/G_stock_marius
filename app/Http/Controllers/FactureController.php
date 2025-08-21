@@ -42,14 +42,36 @@ class FactureController extends Controller
     /**
      * Imprimer une facture xprint
      */
-    public function impression($code, $date)
+   public function impression($code, $date)
     {
-        // Vous récupérez la facture en fonction du code et de la date
-        $factures = Facture::where('date', $date)->where('code', $code)->get();
-        
-        // Retournez la vue dédiée à l'impression
-        return view('Factures.impression', compact('factures', 'date', 'code'));
+        // Récupération des factures
+        $factures = Facture::where('date', $date)
+            ->where('code', $code)
+            ->get();
+
+        if ($factures->isEmpty()) {
+            return redirect()->back()->with('error_message', 'Aucune facture trouvée.');
+        }
+
+        // Récupérer le dernier numéro depuis la table factures
+        $lastNumber = Facture::max('id') ?? 0;
+
+        // Nouveau numéro incrémenté
+        $newNumber = $lastNumber + 1;
+
+        // Mettre à jour toutes les factures du lot avec ce numéro
+        Facture::where('date', $date)
+            ->where('code', $code)
+            ->update(['id' => $newNumber]);
+
+        return view('Factures.impression', [
+            'factures' => $factures,
+            'date' => $date,
+            'code' => $code,
+            'numero' => $newNumber
+        ]);
     }
+
 
     /**
      * Rechercher une facture sur la liste des facture

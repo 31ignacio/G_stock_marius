@@ -77,80 +77,90 @@
         </div>
 
         {{-- Résumé du jour --}}
-        <div class="card shadow-lg border-0 rounded-3 mb-4">
-            <div class="card-header bg-primary text-white py-3">
-                <h5 class="mb-0">
-                    <i class="fas fa-chart-line me-2"></i> <marquee behavior="" direction=""> Résumé des ventes de la journée </marquee>
-                </h5>
-            </div>
-            <div class="card-body bg-light">
+       <div class="card shadow-lg border-0 rounded-3 mb-4">
+    <div class="card-header bg-primary text-white py-3 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">
+            <i class="fas fa-chart-line me-2"></i>
+            <marquee behavior="" direction=""> Résumé des ventes de la journée </marquee>
+        </h5>
 
-                <div class="row g-4">
+        <!-- Bouton toggle collapse -->
+        <button class="btn btn-sm btn-light text-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseResume" aria-expanded="false" aria-controls="collapseResume">
+            <i class="fas fa-chevron-down"></i>
+        </button>
+    </div>
 
-                    {{-- Vente Poissonnerie --}}
-                    <div class="col-md-3">
-                        <div class="p-3 bg-white rounded shadow-sm h-100 d-flex align-items-center">
-                            <div class="flex-grow-1">
-                                <h6 class="text-muted mb-1">Ventes Poissonnerie</h6>
-                                <h4 class="text-success fw-bold m-0">
-                                    {{ number_format($sommeMontantPoissonnerie, 0, ',', '.') }} CFA
-                                </h4>
-                            </div>
-                            <div class="ms-3">
-                                <i class="fas fa-fish fa-2x text-success"></i>
-                            </div>
+    <!-- Collapse (par défaut fermé) -->
+    <div id="collapseResume" class="collapse">
+        <div class="card-body bg-light">
+
+            <div class="row g-4">
+
+                {{-- Vente Poissonnerie --}}
+                <div class="col-md-3">
+                    <div class="p-3 bg-white rounded shadow-sm h-100 d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="text-muted mb-1">Ventes Poissonnerie</h6>
+                            <h4 class="text-success fw-bold m-0">
+                                {{ number_format($sommeMontantPoissonnerie, 0, ',', '.') }} CFA
+                            </h4>
+                        </div>
+                        <div class="ms-3">
+                            <i class="fas fa-fish fa-2x text-success"></i>
                         </div>
                     </div>
+                </div>
 
-                    {{-- Vente Divers --}}
-                    <div class="col-md-3">
-                        <div class="p-3 bg-white rounded shadow-sm h-100 d-flex align-items-center">
-                            <div class="flex-grow-1">
-                                <h6 class="text-muted mb-1">Ventes Divers</h6>
-                                <h4 class="text-warning fw-bold m-0">
-                                    {{ number_format($sommeMontant, 0, ',', '.') }} CFA
-                                </h4>
-                            </div>
-                            <div class="ms-3">
-                                <i class="fas fa-store fa-2x text-warning"></i>
-                            </div>
+                {{-- Vente Divers --}}
+                <div class="col-md-3">
+                    <div class="p-3 bg-white rounded shadow-sm h-100 d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="text-muted mb-1">Ventes Divers</h6>
+                            <h4 class="text-warning fw-bold m-0">
+                                {{ number_format($sommeMontant, 0, ',', '.') }} CFA
+                            </h4>
+                        </div>
+                        <div class="ms-3">
+                            <i class="fas fa-store fa-2x text-warning"></i>
                         </div>
                     </div>
+                </div>
 
-                    {{-- Réduction --}}
-                    <div class="col-md-3">
-                        <div class="p-3 bg-white rounded shadow-sm h-100 d-flex align-items-center">
-                            <div class="flex-grow-1">
-                                <h6 class="text-muted mb-1">Total Réduction</h6>
-                                <h4 class="text-danger fw-bold m-0">
-                                    {{ number_format($sommeMontantReduction, 0, ',', '.') }} CFA
-                                </h4>
-                            </div>
-                            <div class="ms-3">
-                                <i class="fas fa-tags fa-2x text-danger"></i>
-                            </div>
+                {{-- Réduction --}}
+                <div class="col-md-3">
+                    <div class="p-3 bg-white rounded shadow-sm h-100 d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="text-muted mb-1">Total Réduction</h6>
+                            <h4 class="text-danger fw-bold m-0">
+                                {{ number_format($sommeMontantReduction, 0, ',', '.') }} CFA
+                            </h4>
+                        </div>
+                        <div class="ms-3">
+                            <i class="fas fa-tags fa-2x text-danger"></i>
                         </div>
                     </div>
+                </div>
 
-                    {{-- Total Journée --}}
-                    <div class="col-md-3">
-                        <div class="p-3 bg-primary text-white rounded shadow-sm h-100 d-flex align-items-center">
-                            <div class="flex-grow-1">
-                                <h6 class="mb-1">Total Journée</h6>
-                                <h4 class="fw-bold m-0">
-                                    {{ number_format($sommeMontantPoissonnerie + $sommeMontant - $sommeMontantReduction, 0, ',', '.') }} CFA
-                                </h4>
-                            </div>
-                            <div class="ms-3">
-                                <i class="fas fa-calendar-day fa-2x"></i>
-                            </div>
+                {{-- Total Journée --}}
+                <div class="col-md-3">
+                    <div class="p-3 bg-primary text-white rounded shadow-sm h-100 d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">Total Journée</h6>
+                            <h4 class="fw-bold m-0">
+                                {{ number_format($sommeMontantPoissonnerie + $sommeMontant - $sommeMontantReduction, 0, ',', '.') }} CFA
+                            </h4>
+                        </div>
+                        <div class="ms-3">
+                            <i class="fas fa-calendar-day fa-2x"></i>
                         </div>
                     </div>
-
                 </div>
 
             </div>
+
         </div>
+    </div>
+</div>
 
 
 

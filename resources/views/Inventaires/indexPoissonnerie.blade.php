@@ -7,7 +7,13 @@
 
         {{-- Bouton PDF --}}
         <div class="row">
-            <div class="col-md-10"></div>
+            <div class="col-md-8"></div>
+            <div class="col-md-2 mt-3">
+                <button class="btn btn-success" onclick="exportExcel()">
+                    <i class="fas fa-file-excel"></i> Exporter Excel
+                </button>
+            </div>
+
             <div class="col-md-2 mt-3">
                 <button class="btn btn-danger" onclick="generatePDF()">
                     <i class="fas fa-download"></i> Générer PDF
@@ -97,6 +103,7 @@
         });
     });
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 {{-- Mon js pour pdf --}}
     <script>
@@ -170,5 +177,43 @@
                 .save(); // Télécharger le PDF
         }
     </script>
+
+    <script>
+    function exportExcel() {
+        const tableBody = document.querySelector("#inventaireTableBody");
+        const rows = tableBody.querySelectorAll("tr");
+
+        let data = [];
+        // En-têtes
+        data.push(["Produits", "Type", "Stock théorique", "Stock réel", "Écart d'inventaire"]);
+
+        rows.forEach(row => {
+            const cells = row.querySelectorAll("td");
+
+            const produit = cells[0].innerText.trim();
+            const type = cells[1].innerText.trim();
+            const stockTheorique = cells[2].innerText.trim();
+            
+            // Récupérer la valeur saisie dans l'input
+            const stockPhysiqueInput = cells[3].querySelector("input");
+            const stockPhysique = stockPhysiqueInput ? stockPhysiqueInput.value : "";
+
+            const ecart = cells[4].innerText.trim();
+
+            data.push([produit, type, stockTheorique, stockPhysique, ecart]);
+        });
+
+        // Création du fichier Excel
+        const ws = XLSX.utils.aoa_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Inventaire");
+
+        // Nom du fichier
+        const today = new Date();
+        const formattedDate = today.toISOString().split("T")[0]; 
+        XLSX.writeFile(wb, `Ecart_inventaire_poissonnerie_${formattedDate}.xlsx`);
+    }
+</script>
+
 
 @endsection

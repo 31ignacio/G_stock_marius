@@ -519,6 +519,27 @@ class StockController extends Controller
         return view('Stocks.actuelPoissonerie', compact('produits'));
     }
 
+    public function updateStock(Request $request, $id)
+    {
+        $request->validate([
+            'stock_actuel' => 'required|numeric|min:0',
+        ]);
+
+        $produit = grosProduit::findOrFail($id);
+
+        // Pour mettre à jour le stock actuel
+        $totalSortie = DB::table('factures')
+            ->where('produit', $produit->libelle)
+            ->sum('quantite');
+
+        // Nouvelle quantité totale = stock_actuel + sorties
+        $produit->quantite = $request->stock_actuel + $totalSortie;
+        $produit->save();
+
+        return redirect()->back()->with('success_message', 'Stock mis à jour avec succès.');
+    }
+
+
 
     /**
      * PDF du stock actuel poissonnerie

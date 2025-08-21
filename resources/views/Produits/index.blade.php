@@ -226,7 +226,7 @@
                       id="libelle{{ $loop->iteration }}" 
                       name="libelle" 
                       value="{{ $produit->libelle }}" 
-                      readonly>
+                      >
                   </div>
 
                   <div class="form-row">
@@ -245,7 +245,6 @@
                         min="0" 
                         required>
                     </div>
-
 
                     <div class="form-group col-md-6">
                       <label for="prix{{ $loop->iteration }}">

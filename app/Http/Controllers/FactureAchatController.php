@@ -31,7 +31,7 @@ class FactureAchatController extends Controller
         ->unique(function ($facture) {
             return $facture->code . $facture->date . $facture->totalTTC . $facture->totalHT;
         })
-        ->sortByDesc('date');
+        ->sortByDesc('code');
 
         $societes= Societe::all();
             

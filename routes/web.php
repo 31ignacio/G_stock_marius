@@ -148,6 +148,9 @@ Route::prefix('admin')->group(function () {
         Route::get('/stocks/actuel/divers/excel', function () {
             return Excel::download(new DiversStockExport, 'stocks_actuel_divers.xlsx');
         })->name('stocks.actuel.divers.excel');
+
+        Route::put('/stock/{produit}/update', [StockController::class, 'updateStock'])->name('stock.updatee');
+
     });
 
         Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications');

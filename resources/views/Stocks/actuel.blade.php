@@ -87,6 +87,7 @@
                                             @if(auth()->user()->role_id == 1)
                                             <td>{{ number_format($totalVente, 0, '.', ' ') }} </td>
                                             <td>{{ number_format($marge, 0, '.', ' ') }} </td>
+                                                
                                             @endif
                                         </tr>
                                     @endforeach
@@ -116,4 +117,5 @@
 
     </div>
 </section>
+
 @endsection
